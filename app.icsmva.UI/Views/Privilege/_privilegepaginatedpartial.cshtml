@@ -1,0 +1,72 @@
+﻿@model PagedModel<PRIVILEGES>
+@{
+    ViewData["Title"] = "Index";
+    var ff = Model;
+    int SN = Model.FirstSerialNumber;
+    PagedList pager = new PagedList();
+    int pageNo = 0;
+    if (Model.PagedList != null)
+    {
+        pager = Model.PagedList;
+        pageNo = Model.PagedList.PageIndex;
+        SN = ((Model.PagedList.PageIndex * Model.PagedList.PageSize) - Model.PagedList.PageSize) + 1;
+    }
+    string urlinstring = "UserRole/Getpage";
+    Pager pagemodel = new Pager() { PagedList = pager, StringUrl = urlinstring };
+}
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered  table-hover">
+            <thead class="thead-deft">
+                <tr>
+                    <th>
+                        SL
+                    </th>
+                    <th>
+                        UI Name
+                    </th>
+                    <th>
+                        Action Name
+                    </th>
+
+                    <th>
+                        Privilege Name
+                    </th>
+                    <th>
+                        Creation Date
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Models)
+                {
+                    <tr id="@SN">
+                        <td>
+                            ss
+                            @SN
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UIName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ActionName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PrivilegeName)
+                        </td>
+                        <td>
+                            @item.CreationDate.ToLongDateString();
+                        </td>
+                    </tr>
+                    SN++;
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+
+        <div class="text-left">
+            @await Html.PartialAsync("_privilegepagingpartial", pagemodel)
+        </div>
+    </div>
+</div>

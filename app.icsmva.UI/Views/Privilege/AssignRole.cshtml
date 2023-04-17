@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewData["Title"] = "AssignRole";
+    Layout = "~/Views/Shared/admin_Layout.cshtml";
+}
+
+<h1>AssignRole</h1>
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            $('#PrivilegeConfiguration').addClass('menu-open');
+            $('#AssignRole').addClass('active');
+
+        });
+    </script>
+    }

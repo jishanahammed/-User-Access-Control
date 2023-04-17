@@ -1,0 +1,136 @@
+﻿@inject ICurentUserGet workcontect
+@{
+    var currentuser =  workcontect.getcurrentuser();
+}
+<style>
+    [class*=sidebar-light-] .nav-sidebar > .nav-item.menu-open > .nav-link, [class*=sidebar-light-] .nav-sidebar > .nav-item:hover > .nav-link {
+        background-color: #947b5b !important;
+        color: #f7faff !important;
+        font-weight: 900;
+    }
+
+    [class*=sidebar-light-] .nav-sidebar > .nav-item.menu-open > .nav-link, [class*=sidebar-light-] .nav-sidebar > .nav-item:hover > .nav-link i {
+            color: #f7faff !important;
+        }
+    .nav-treeview > .nav-item > .nav-link.active, [class*=sidebar-light-] .nav-treeview > .nav-item > .nav-link.active:hover {
+        background-color: #947b5b !important;
+        color: #f7faff !important;
+        border: 1px solid #e0d2b7 !important;
+        font-weight:900;
+    }
+
+    .navbar-white {
+        /* background-color: #fff; */
+        color: #fbf3ea !important;
+        background-color: #947b5b;
+    }
+
+    .layout-navbar-fixed .wrapper .sidebar-light-info .brand-link:not([class*=navbar]) {
+        color:#fbf3ea;
+        background-color: #947b5b;
+    }
+
+    .main-header .nav-link i {
+        color: #fbf3ea !important;
+    }
+
+    [class*=sidebar-light-] {
+        background-color: #e0d2b7 !important;
+    }
+
+    .main-sidebar .nav-link i {
+        color: #947b5b;
+    }
+
+    .nav-sidebar > .nav-item {
+        margin-bottom: 0;
+        border-bottom: 1px solid #947b5b;
+    }
+
+    .sidebar-dark-info .nav-sidebar > .nav-item > .nav-link.active, .sidebar-light-info .nav-sidebar > .nav-item > .nav-link.active {
+        background-color: #947b5b;
+        color: #fff;
+        border-radius: 0rem !important;
+    }
+</style>
+
+<aside class="main-sidebar sidebar-light-info elevation-4">
+    <a href="/Admin/Index" class="brand-link text-center" style="line-height:1.4;font-size:17px">
+       <b> User Access Control</b>
+        
+    </a>
+
+    <div class="sidebar">
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+                <li class="nav-item" style="font-weight:500">
+                    <p style="font-weight:800;text-align:center;padding: 6px 0px 12px 0px;margin-bottom:0px; font-size: 18px;">
+                        @currentuser.FullName
+                        </p>
+                </li>
+
+
+
+                <li class="nav-item"  style="font-weight:800">
+                    
+                    <a asp-controller="Admin" asp-action="Index" id="Dashboard" class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            Dashboard
+                        </p>
+                    </a>
+                </li>
+                @foreach (var item in currentuser.MenuPermition)
+                {
+                <li class="nav-item" style="font-weight:800">
+
+                    <a asp-controller="@item.ControllerName" asp-action="@item.ActionName" id="@item.UiNmae" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                           @item.UiNmae
+                        </p>
+                    </a>
+                </li>
+                }
+   @*             <li class="nav-item" style="font-weight:800">
+
+                    <a asp-controller="UserRole" asp-action="Role_View" id="UsersRole" class="nav-link">
+                        <i class="nav-icon fas fa-clipboard-check"></i>
+                        <p>
+                           User  Roles
+                        </p>
+                    </a>
+                </li>
+
+
+                <li class="nav-item" id="PrivilegeConfiguration" style="font-weight:800">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-cog"></i>
+                        <p>
+                            Privilege
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview ">
+                        <li class="nav-item">
+                            <a href="/Privilege/Index" class="nav-link " id="Privilege">
+                                <i class="nav-icon fas fa-angle-double-right"></i>
+                                <p>Privilege List</p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a href="/Privilege/AssignRole" class="nav-link " id="AssignRole">
+                                <i class="nav-icon fas fa-angle-double-right"></i>
+                                <p>Assign Role</p>
+                            </a>
+                        </li>    
+                    </ul>                  
+                </li>*@
+
+
+            </ul>
+        </nav>
+    </div>
+</aside>
+

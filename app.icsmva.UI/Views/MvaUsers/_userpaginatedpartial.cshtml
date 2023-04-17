@@ -1,0 +1,84 @@
+﻿@model PagedModel<USERS>
+@{
+    ViewData["Title"] = "Index";
+    var ff = Model;
+    int SN = Model.FirstSerialNumber;
+    PagedList pager = new PagedList();
+    int pageNo = 0;
+    if (Model.PagedList != null)
+    {
+        pager = Model.PagedList;
+        pageNo = Model.PagedList.PageIndex;
+        SN = ((Model.PagedList.PageIndex * Model.PagedList.PageSize) - Model.PagedList.PageSize) + 1;
+    }
+    string urlinstring = "MvaUsers/Getpage";
+    Pager pagemodel = new Pager() { PagedList = pager, StringUrl = urlinstring };
+}
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered  table-hover">
+            <thead class="thead-deft">
+                <tr>
+                    <th>
+                        SL
+                    </th>
+                    <th>
+                        Login Name
+                    </th>
+                    <th>
+                        Full Name
+                    </th>
+                    <th>
+                        Application Name
+                    </th>
+
+                    <th>
+                        Employee No
+                    </th>
+                    <th>
+                        Remarks
+                    </th>
+                    <th>
+                        Creation Date
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Models)
+                {
+                    <tr id="@SN">
+                        <td>
+                            
+                            @SN
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LoginName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ApplicationName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Remarks)
+                        </td>
+                        <td>
+                            @item.CreationDate.ToLongDateString();
+                        </td>
+                    </tr>
+                    SN++;
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+
+        <div class="text-left">
+            @await Html.PartialAsync("_userpagingpartial", pagemodel)
+        </div>
+    </div>
+</div>

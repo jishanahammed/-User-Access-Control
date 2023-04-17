@@ -1,0 +1,142 @@
+﻿@model PagedModel<USERS>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/admin_Layout.cshtml";
+    var ff = Model;
+    int SN = Model.FirstSerialNumber;
+    PagedList pager = new PagedList();
+    int pageNo = 0;
+    if (Model.PagedList != null)
+    {
+        pager = Model.PagedList;
+        pageNo = Model.PagedList.PageIndex;
+        SN = ((Model.PagedList.PageIndex * Model.PagedList.PageSize) - Model.PagedList.PageSize) + 1;
+    }
+    string urlinstring = "MvaUsers/Getpage";
+    Pager pagemodel = new Pager() { PagedList = pager, StringUrl = urlinstring };
+}
+
+
+<div class="content-header">
+    <div class="container-fluid ">
+        <div class="breadcrumb d-flex justify-content-between align-items-center shadow pl-3 pr-3">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item"><a href="/Admin/Index" style="font-weight:800;color:#fff">Home</a></li>
+                <li class="breadcrumb-item active" style="color:#fff">Users</li>
+            </ol>
+            <div>
+                <a><i class="fa fa-plus"></i>  Users </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <div class="row w-100">
+                    <div class="col-6">
+                        <h5> <i class="fas fa-list"></i>All Users  </h5>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-right" style="float:right !important">
+                            <strong class="card-title">
+                                Show
+                                <select id="sizeperpageselect" onchange="LoadPagination('@urlinstring',1)">
+                                    <option value="10" selected>10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="25">25</option>
+                                    <option value="30">30</option>
+                                    <option value="40">40</option>
+                                    <option value="50">50</option>
+                                    <option value="60">60</option>
+                                </select> per page
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="paginatedsection">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered  table-hover">
+                            <thead class="thead-deft">
+                                <tr>
+                                    <th>
+                                        SL
+                                    </th>
+                                    <th>
+                                        Login Name
+                                    </th>
+                                    <th>
+                                        Full Name
+                                    </th> 
+                                    <th>
+                                        Application Name
+                                    </th>
+
+                                    <th>
+                                        Employee No
+                                    </th>           
+                                    <th>
+                                        Remarks
+                                    </th>
+                                    <th>
+                                        Creation Date
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Models)
+                                {
+                                    <tr id="@SN">
+                                        <td>                                          
+                                            @SN
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.LoginName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FullName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ApplicationName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EmployeeNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Remarks)
+                                        </td>
+                                        <td>
+                                            @item.CreationDate.ToLongDateString()
+                                        </td>
+                                    </tr>
+                                    SN++;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+
+                        <div class="text-left">
+                            @await Html.PartialAsync("_userpagingpartial", pagemodel)
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#Users').addClass('active');
+        });
+    </script>
+}

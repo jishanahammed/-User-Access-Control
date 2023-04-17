@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace app.icsmva.Models
+{
+    public class ROLES
+    {
+        public ROLES()
+        {
+            this.USERS = new HashSet<USERS>();
+        }
+        [Key]
+        public int RoleID { set; get; }
+        public string RoleName { set; get; }
+        public string ApplicationName { set; get; }
+        public string Remarks { set; get; }
+        public DateTime CreationDate { set; get; }
+        public int CreatedBy { set; get; }
+        public DateTime LastUpdatedDate { set; get; }
+        public int LastUpdatedBy { set; get; }
+        public short IsDeleted { set; get; }
+        public virtual ICollection<USERS> USERS { get; set; }
+    }
+}
