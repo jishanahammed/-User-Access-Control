@@ -13,6 +13,10 @@
     }
     string urlinstring = "MvaUsers/Getpage";
     Pager pagemodel = new Pager() { PagedList = pager, StringUrl = urlinstring };
+    var add = Model.action.FirstOrDefault(f => f.url == ("/MvaUsersAdd/User_Add").Trim());
+    var Edit = Model.action.FirstOrDefault(f => f.url == ("/MvaUserModify/User_Modify").Trim());
+    var delete = Model.action.FirstOrDefault(f => f.url == ("/MvaUserDelete/User_Delete").Trim());
+}
 }
 <div class="card-body">
     <div class="table-responsive">
@@ -41,6 +45,9 @@
                     <th>
                         Creation Date
                     </th>
+                    <th class="text-center">
+                        Action
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -67,7 +74,17 @@
                             @Html.DisplayFor(modelItem => item.Remarks)
                         </td>
                         <td>
-                            @item.CreationDate.ToLongDateString();
+                            @item.CreationDate.ToLongDateString()
+                        </td>
+                        <td class="text-center">
+                            @if (Edit != null)
+                            {
+                                <a type="submit" class="btn btn-info" href="@Edit.url"> Edit</a>
+                            }
+                            @if (delete != null)
+                            {
+                                <a type="submit" class="btn btn-danger" href="@delete.url"> Delete </a>
+                            }
                         </td>
                     </tr>
                     SN++;

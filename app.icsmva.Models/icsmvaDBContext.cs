@@ -17,5 +17,6 @@ namespace app.icsmva.Models
         public virtual DbSet<PRIVILEGES> PRIVILEGES { get; set; }
         public virtual DbSet<ROLES> ROLES { get; set; }
         public virtual DbSet<ROLESPRIVILEGESMAP> ROLESPRIVILEGESMAP { get; set; }
+        public virtual DbSet<APPLICATIONNAME> APPLICATIONNAME { get; set; }
     }
 }

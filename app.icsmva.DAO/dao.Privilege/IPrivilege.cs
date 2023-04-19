@@ -1,4 +1,5 @@
-﻿using app.icsmva.Models;
+﻿using app.icsmva.DAO.dao.RolesAndPrivilegeMap;
+using app.icsmva.Models;
 using app.icsmva.Utility.Miscellaneous;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ namespace app.icsmva.DAO.dao.Privilege
 {
     public interface IPrivilege
     {
-        PagedModel<PRIVILEGES> GetRolesPagedListAsync(int page, int pageSize);
+        PagedModel<PRIVILEGES> GetpriviligePagedListAsync(int page, int pageSize);
+        List<RolePrivilegeViewModel> GetAllprivilige(int roleId);
+     
     }
 }

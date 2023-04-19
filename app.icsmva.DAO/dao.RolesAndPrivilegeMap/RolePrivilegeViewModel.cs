@@ -16,5 +16,7 @@ namespace app.icsmva.DAO.dao.RolesAndPrivilegeMap
         public string ActionName { set; get; }
         public short ActionPrecedence { set; get; }
         public string PrivilegeName { set; get; }
+        public bool IsAssign { set; get; }
     }
 }
+

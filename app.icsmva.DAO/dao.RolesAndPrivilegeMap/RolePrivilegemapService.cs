@@ -59,6 +59,7 @@ namespace app.icsmva.DAO.dao.RolesAndPrivilegeMap
                 model.ActionName = privlige.ActionName;
                 model.PrivilegeName = privlige.PrivilegeName;
                 model.ActionPrecedence = privlige.ActionPrecedence;
+                model.IsAssign = true;
                 models.Add(model);  
             }          
            return models;

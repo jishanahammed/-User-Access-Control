@@ -1,3 +1,4 @@
+using app.icsmva.DAO.dao.Application;
 using app.icsmva.DAO.dao.Privilege;
 using app.icsmva.DAO.dao.RolesAndPrivilegeMap;
 using app.icsmva.DAO.dao.userRole;
@@ -26,6 +27,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddMemoryCache();
 
 builder.Services.AddTransient<IPrivilege, PrivilegeService>();
+builder.Services.AddTransient<IApplicationName, ApplicationService>();
 builder.Services.AddTransient<IUsersRoles, UsersRolesService>();
 builder.Services.AddTransient<IUsers, UserService>();
 builder.Services.AddTransient<IRolePrivilegemap, RolePrivilegemapService>();

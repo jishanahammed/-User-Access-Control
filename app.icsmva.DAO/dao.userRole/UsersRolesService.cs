@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace app.icsmva.DAO.dao.userRole
 {
-    public class UsersRolesService:IUsersRoles
+    public class UsersRolesService : IUsersRoles
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly icsmvaDBContext db;
@@ -22,10 +22,61 @@ namespace app.icsmva.DAO.dao.userRole
             this.privilegemap = privilegemap;
         }
 
+        public int Addrole(UserRoleViewModel model)
+        {
+            ROLES role = new ROLES();
+            role.RoleName = model.RoleName;
+            role.ApplicationName = model.ApplicationName;
+            role.Remarks = model.Remarks;         
+            var useid = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "UserId").Value;
+            int UserId = Convert.ToInt32(useid);
+            role.CreationDate=DateTime.UtcNow; 
+            role.LastUpdatedDate=DateTime.UtcNow; 
+            role.CreatedBy = UserId;
+            role.IsDeleted = 1;
+            db.ROLES.Add(role);
+            db.SaveChanges();
+            if (role.RoleID != 0)
+            {
+                var result = model.mapprivilege.Where(f => f.IsAssign == true).ToList();
+                if (result!=null)
+                {
+                    List<ROLESPRIVILEGESMAP> mapdata = new List<ROLESPRIVILEGESMAP>();
+                    foreach (var item in result) {
+                        ROLESPRIVILEGESMAP entty=new ROLESPRIVILEGESMAP();
+                        entty.RoleID = role.RoleID;
+                        entty.PrivilegeID = item.PrivilegeID;
+                        entty.CreationDate = DateTime.UtcNow;
+                        entty.LastUpdatedDate = DateTime.UtcNow;
+                        entty.CreatedBy = UserId;
+                        entty.IsDeleted = 1;
+                        mapdata.Add(entty);
+                    }
+                    db.ROLESPRIVILEGESMAP.AddRange(mapdata);
+                    db.SaveChanges();   
+                }
+                model.RoleID = role.RoleID;
+                return role.RoleID;
+            }
+            return role.RoleID;
+        }
+
         public ROLES GetRole(int id)
         {
-           ROLES rOLES = db.ROLES.Where(f=>f.RoleID==id).FirstOrDefault();
+            ROLES rOLES = db.ROLES.Where(f => f.RoleID == id).FirstOrDefault();
             return rOLES;
+        }
+
+        public ROLES GetRolename(string name)
+        {
+            var data = db.ROLES.Where(f => f.RoleName.Replace(" ", "").Trim() == name.Replace(" ", "").Trim() || f.RoleName.Contains(name)).FirstOrDefault();
+            return data;
+        }
+
+        public List<ROLES> GetROLEs()
+        {
+            List<ROLES> roleList = db.ROLES.Where(f => f.IsDeleted == 1).ToList();
+            return roleList; 
         }
 
         public PagedModel<ROLES> GetRolesPagedListAsync(int page, int pageSize)

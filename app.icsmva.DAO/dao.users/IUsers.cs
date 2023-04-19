@@ -12,5 +12,8 @@ namespace app.icsmva.DAO.dao.users
     {
         PagedModel<USERS> GetUserPagedListAsync(int page, int pageSize);
         USERS GetUser(string name);
+        int  Adduser(UserViewModel model);
+
+
     }
 }

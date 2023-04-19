@@ -15,7 +15,7 @@ namespace app.icsmva.UI.Controllers.Admin
         {
             if (page < 1)
                 page = 1;
-            var result = privilegeservice.GetRolesPagedListAsync(page, pagesize);
+            var result = privilegeservice.GetpriviligePagedListAsync(page, pagesize);
             return View(result);
         }
         [HttpGet]
@@ -23,7 +23,7 @@ namespace app.icsmva.UI.Controllers.Admin
         {
             if (page < 1)
                 page = 1;
-            var result = privilegeservice.GetRolesPagedListAsync(page, pagesize);
+            var result = privilegeservice.GetpriviligePagedListAsync(page, pagesize);
             return PartialView("_privilegepaginatedpartial", result);
         }
         public IActionResult AssignRole()

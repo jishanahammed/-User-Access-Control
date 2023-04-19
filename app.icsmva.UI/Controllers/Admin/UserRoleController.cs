@@ -1,8 +1,10 @@
 ﻿using app.icsmva.DAO.dao.userRole;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace app.icsmva.UI.Controllers.Admin
 {
+    [Authorize]
     public class UserRoleController : Controller
     {
         private readonly IUsersRoles usersRoles;
@@ -10,6 +12,7 @@ namespace app.icsmva.UI.Controllers.Admin
         {
             this.usersRoles = usersRoles;
         }
+        [Authorize("Authorization")]
         public IActionResult Role_View(int page = 1, int pagesize = 10)
         {
             if (page < 1)

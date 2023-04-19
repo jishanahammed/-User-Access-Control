@@ -13,6 +13,9 @@
     }
     string urlinstring = "UserRole/Getpage";
     Pager pagemodel = new Pager() { PagedList = pager, StringUrl = urlinstring };
+    var add = Model.action.FirstOrDefault(f => f.url == ("/UserRoleAdd/Role_Add").Trim());
+    var Edit = Model.action.FirstOrDefault(f => f.url == ("/UserRoleModify/Role_Modify").Trim());
+    var delete = Model.action.FirstOrDefault(f => f.url == ("/UserRoleDelete/Role_Delete").Trim());
 }
 <div class="card-body">
     <div class="table-responsive">
@@ -35,7 +38,9 @@
                     <th>
                         Creation Date
                     </th>
-
+                    <th class="text-center">
+                        Action
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -56,6 +61,16 @@
                         </td>
                         <td>
                             @item.CreationDate.ToLongDateString();
+                        </td>
+                        <td class="text-center">
+                            @if (Edit != null)
+                            {
+                                <a type="submit" class="btn btn-info" href="@Edit.url"> Edit</a>
+                            }
+                            @if (delete != null)
+                            {
+                                <a type="submit" class="btn btn-danger" href="@delete.url"> Delete </a>
+                            }
                         </td>
                     </tr>
                     SN++;
