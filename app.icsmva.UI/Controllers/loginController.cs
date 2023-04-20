@@ -29,6 +29,12 @@ namespace app.icsmva.UI.Controllers
          public async Task<IActionResult> Index(LoginViewModel model)
         {
             var user=usersservice.GetUser(model.UserName);
+            if (user==null)
+            {
+                ModelState.AddModelError(string.Empty, "User not found");
+
+                return View(model);
+            }
 
             if (user.LoginPWD==model.Password)
             {

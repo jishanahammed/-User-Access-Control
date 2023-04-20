@@ -68,7 +68,7 @@ namespace app.icsmva.DAO.dao.RolesAndPrivilegeMap
         public RolePrivilegeViewModel Getsingle(int RPMapId)
         {
             RolePrivilegeViewModel model = new RolePrivilegeViewModel();
-            var mapdata = db.ROLESPRIVILEGESMAP.FirstOrDefault(f => f.RPMapId == RPMapId);
+            var mapdata = db.ROLESPRIVILEGESMAP.FirstOrDefault(f => f.RPMapId == RPMapId&&f.IsDeleted==1);
             var privlige = db.PRIVILEGES.FirstOrDefault(f => f.PrivilegeID == mapdata.PrivilegeID);
             var role = db.ROLES.Where(d => d.RoleID == mapdata.RoleID).FirstOrDefault();
             model.RoleID = mapdata.RoleID;
@@ -86,7 +86,7 @@ namespace app.icsmva.DAO.dao.RolesAndPrivilegeMap
             var Rid = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "RoleId").Value;
             int RoleId = Convert.ToInt32(Rid);
             var role = db.ROLES.Where(d => d.RoleID == RoleId).FirstOrDefault();
-            var mapdata = db.ROLESPRIVILEGESMAP.Where(f => f.RoleID == RoleId).ToList();
+            var mapdata = db.ROLESPRIVILEGESMAP.Where(f => f.RoleID == RoleId&&f.IsDeleted==1).ToList();
             List<ActionViewModel> models = new List<ActionViewModel>();
             foreach (var item in mapdata)
             {
@@ -105,7 +105,7 @@ namespace app.icsmva.DAO.dao.RolesAndPrivilegeMap
         {
             List<UserMenuPermitionVM> models = new List<UserMenuPermitionVM>();
             var role = db.ROLES.Where(d => d.RoleID == RoleId).FirstOrDefault();
-            var mapdata = db.ROLESPRIVILEGESMAP.Where(f => f.RoleID == RoleId).ToList();
+            var mapdata = db.ROLESPRIVILEGESMAP.Where(f => f.RoleID == RoleId&&f.IsDeleted==1).ToList();
 
             foreach (var item in mapdata)
             {

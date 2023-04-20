@@ -2,6 +2,7 @@
 using app.icsmva.Models;
 using app.icsmva.Utility.Miscellaneous;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +61,49 @@ namespace app.icsmva.DAO.dao.userRole
             }
             return role.RoleID;
         }
+        public int Updaterole(UserRoleViewModel model)
+        {
+            ROLES role = db.ROLES.FirstOrDefault(f=>f.RoleID==model.RoleID);
+            role.RoleName = model.RoleName;
+            role.ApplicationName = model.ApplicationName;
+            role.Remarks = model.Remarks;
+            var useid = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "UserId").Value;
+            int UserId = Convert.ToInt32(useid);
+            role.LastUpdatedDate = DateTime.UtcNow;
+            role.LastUpdatedBy = UserId;
+            db.Entry(role).State = EntityState.Modified;
+            var res = db.SaveChanges();
+            if (res>0)
+            {
+                List<ROLESPRIVILEGESMAP> deletedata=db.ROLESPRIVILEGESMAP.Where(f=>f.RoleID==role.RoleID).ToList(); 
+                var result = model.mapprivilege.Where(f => f.IsAssign == true).ToList();
+                if (result != null)
+                {
+                    List<ROLESPRIVILEGESMAP> mapdata = new List<ROLESPRIVILEGESMAP>();
+                    foreach (var item in result)
+                    {
+                        ROLESPRIVILEGESMAP entty = new ROLESPRIVILEGESMAP();
+                        entty.RoleID = role.RoleID;
+                        entty.PrivilegeID = item.PrivilegeID;
+                        entty.CreationDate = DateTime.UtcNow;
+                        entty.LastUpdatedDate = DateTime.UtcNow;
+                        entty.CreatedBy = UserId;
+                        entty.IsDeleted = 1;
+                        mapdata.Add(entty);
+                    }
+                    db.ROLESPRIVILEGESMAP.AddRange(mapdata);
+                  var ressave=  db.SaveChanges();
+                    if (ressave>0)
+                    {
+                        db.ROLESPRIVILEGESMAP.RemoveRange(deletedata);
+                        db.SaveChanges();
+                    }
+                }
+                model.RoleID = role.RoleID;
+                return role.RoleID;
+            }
+            return role.RoleID;
+        }
 
         public ROLES GetRole(int id)
         {
@@ -96,6 +140,12 @@ namespace app.icsmva.DAO.dao.userRole
                 action = privilegemap.Rolepermition()
             };
             return pagedModel;
+        }
+
+        public ROLES GetRolenameexit(UserRoleViewModel model)
+        {
+            ROLES rOLES = db.ROLES.FirstOrDefault(f => f.RoleName == model.RoleName && f.RoleID != model.RoleID);
+            return rOLES;
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿@model UserRoleViewModel
 @{
-    ViewData["Title"] = "Role_Add";
+    ViewData["Title"] = "Role_Delete";
     Layout = "~/Views/Shared/admin_Layout.cshtml";
 }
+
 <style>
     .shadow {
         box-shadow: 0 .2rem 1rem rgba(0,0,0,0.10) !important;
@@ -21,7 +22,7 @@
         <div class="breadcrumb d-flex justify-content-between align-items-center shadow pl-3 pr-3">
             <ol class="breadcrumb mb-0 p-0">
                 <li class="breadcrumb-item"><a href="/Admin/Index" style="font-weight:800;color:#fff">Home</a></li>
-                <li class="breadcrumb-item active" style="color:#fff">Add User Roles</li>
+                <li class="breadcrumb-item active" style="color:#fff">Role Delete</li>
             </ol>
             <div>
                 <a href="/UserRole/Role_View" style="color:#fff;font-weight:900"><i class="fa fa-backward mr-2"></i> Back to  User Roles List </a>
@@ -38,26 +39,26 @@
             <div class="card-header">
                 <div class="row w-100">
                     <div class="col-6">
-                        <h5> <i class="fas fa-plug"></i> User Roles</h5>
+                        <h5> <i class="fas fa-trash"></i>Role Delete</h5>
                     </div>
                 </div>
             </div>
             <div class="card-body">
-                <form asp-action="Role_Add">
+                <form asp-action="Role_Delete">
                     <input type="hidden" asp-for="RoleID" />
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label asp-for="RoleName" class="control-label"></label>
-                                <input  asp-for="RoleName" class="form-control" required />
+                                <input readonly asp-for="RoleName" class="form-control" required />
                                 <span asp-validation-for="RoleName" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label asp-for="ApplicationName" class="control-label"> Application Name </label>
-                                <select asp-for="ApplicationName" class="form-control" asp-items="ViewBag.applicationlist" required>
+                                <select readonly asp-for="ApplicationName" class="form-control" asp-items="ViewBag.applicationlist" required>
                                     <option value="">Select Application Name</option>
                                 </select>
                                 <span asp-validation-for="ApplicationName" class="text-danger"></span>
@@ -65,7 +66,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label asp-for="Remarks" class="control-label"></label>
+                                <label readonly  asp-for="Remarks" class="control-label"></label>
                                 <input asp-for="Remarks" class="form-control" required />
                                 <span asp-validation-for="Remarks" class="text-danger"></span>
                             </div>
@@ -78,27 +79,23 @@
                         </div>
                     </div>
                     <div class="row">
-                    @for (var i = 0; i < Model.mapprivilege.Count(); i++)
-					{
-                        <div class="col-sm-2 mb-4">
+                        @for (var i = 0; i < Model.mapprivilege.Count(); i++)
+                        {
+                            <div class="col-sm-2 mb-4">
                                 <div class="form-check shadow ">
-                                    <input type="checkbox" id="@Model.mapprivilege[i].PrivilegeID"  asp-for="@Model.mapprivilege[i].IsAssign" />
-                                    <label style="margin-left:10px;"  for="@Model.mapprivilege[i].PrivilegeID">@Model.mapprivilege[i].ActionName</label>
-                                    <input type="hidden" asp-for="@Model.mapprivilege[i].PrivilegeID" />                                 
+                                    <input disabled type="checkbox" id="@Model.mapprivilege[i].PrivilegeID" asp-for="@Model.mapprivilege[i].IsAssign" />
+                                    <label style="margin-left:10px;" for="@Model.mapprivilege[i].PrivilegeID">@Model.mapprivilege[i].ActionName</label>
+                                    <input type="hidden" asp-for="@Model.mapprivilege[i].PrivilegeID" />
                                 </div>
-                        </div>
-                    }
+                            </div>
+                        }
                     </div>
 
                     <div class="form-group mt-4 text-center">
-                        @if(Model.RoleID>0){
-                            <input type="submit" onclick="return confirm('Are you sure you want to Add this?')" value="Update" class="btn btn-warning" />
-                        }
-                        else
+                        @if (Model.RoleID > 0)
                         {
-                            <input type="submit" onclick="return confirm('Are you sure you want to Add this?')" value="submit" class="btn btn-primary" />
+                            <input type="submit" onclick="return confirm('Are you sure you want to delete this?')" value="Delete" class="btn btn-danger" />
                         }
-                       
                     </div>
                 </form>
 

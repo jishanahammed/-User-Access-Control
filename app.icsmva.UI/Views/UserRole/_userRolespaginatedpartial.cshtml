@@ -34,7 +34,7 @@
 
                     <th>
                         Remarks
-                    </th>   
+                    </th>
                     <th>
                         Creation Date
                     </th>
@@ -65,11 +65,11 @@
                         <td class="text-center">
                             @if (Edit != null)
                             {
-                                <a type="submit" class="btn btn-info" href="@Edit.url"> Edit</a>
+                                <a type="submit" class="btn btn-info" href="@Edit.url?id=@item.RoleID"> Edit</a>
                             }
                             @if (delete != null)
                             {
-                                <a type="submit" class="btn btn-danger" href="@delete.url"> Delete </a>
+                                <a type="submit" class="btn btn-danger" href="@delete.url?id=@item.RoleID"> Delete </a>
                             }
                         </td>
                     </tr>

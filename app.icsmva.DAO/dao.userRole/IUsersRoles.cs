@@ -14,7 +14,9 @@ namespace app.icsmva.DAO.dao.userRole
         PagedModel<ROLES> GetRolesPagedListAsync(int page, int pageSize);
         ROLES GetRole(int id);
         ROLES GetRolename(string name);
+        ROLES GetRolenameexit(UserRoleViewModel model);
         int Addrole(UserRoleViewModel model);
+        int Updaterole(UserRoleViewModel model);
         List<ROLES> GetROLEs();
       
     }

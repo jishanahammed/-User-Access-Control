@@ -21,5 +21,7 @@ namespace app.icsmva.DAO.dao.users
         public DateTime LastUpdatedDate { set; get; }
         public int LastUpdatedBy { set; get; }
         public short IsDeleted { set; get; }
+        public string sms { set; get; }
+        
     }
 }
