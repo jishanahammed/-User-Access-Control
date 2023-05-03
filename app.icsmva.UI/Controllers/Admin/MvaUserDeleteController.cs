@@ -21,28 +21,35 @@ namespace app.icsmva.UI.Controllers.Admin
             this.application = application;
         }
         [Authorize("Authorization")]
-        public IActionResult User_Delete(int userId)
-        {
-            UserViewModel user = users.GetUserbyid(userId);
-            ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.Applicationname, Name = s.Applicationname }), "Id", "Name");
-            ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
+        //public IActionResult User_Delete(int userId)
+        //{
+        //    UserViewModel user = users.GetUserbyid(userId);
+        //    ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.Applicationname, Name = s.Applicationname }), "Id", "Name");
+        //    ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
 
-            return View(user);
-        }
-        [HttpPost]
-        public IActionResult User_Delete(UserViewModel model)
+        //    return View(user);
+        //}
+        //[HttpPost]
+        //public IActionResult User_Delete(UserViewModel model)
+        //{
+        //    bool res=users.Deleteuser(model);
+        //    if (res)
+        //    {
+        //        return RedirectToAction("User_View", "MvaUsers");
+        //    }
+        //    else
+        //    {
+        //        ModelState.AddModelError(string.Empty, "Entry Faild");
+        //        return View(model);
+        //    }
+
+        //}
+        [Authorize("Authorization")]
+        [HttpGet]
+        public IActionResult User_Delete(int id)
         {
-            bool res=users.Deleteuser(model);
-            if (res)
-            {
-                return RedirectToAction("User_View", "MvaUsers");
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Entry Faild");
-                return View(model);
-            }
-            
+            bool res = users.Deleteuser(id);
+            return Json(res);
         }
     }
 }

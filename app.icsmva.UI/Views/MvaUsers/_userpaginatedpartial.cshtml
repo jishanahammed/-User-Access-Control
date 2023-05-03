@@ -55,14 +55,20 @@
                 {
                     <tr id="@SN">
                         <td>
-                            
                             @SN
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.LoginName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.FullName)
+                            @if (Edit != null)
+                            {
+                                <a type="submit" class="link-primary font-weight-bold" href="@Edit.url?userId=@item.UserID"> @item.FullName</a>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => item.FullName)
+                            }
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.ApplicationName)
@@ -77,14 +83,16 @@
                             @item.CreationDate.ToLongDateString()
                         </td>
                         <td class="text-center">
-                            @if (Edit != null)
-                            {
-                                <a type="submit" class="btn btn-info" href="@Edit.url?userId=@item.UserID"> Edit</a>
-                            }
+                            @*@if (Edit != null)
+                        {
+                        <a type="submit" class="btn btn-info" href="@Edit.url?userId=@item.UserID"> Edit</a>
+                        }*@
                             @if (delete != null)
                             {
-                                <a type="submit" class="btn btn-danger" href="@delete.url?userId=@item.UserID"> Delete </a>
+
+                                <a type="submit" class="btn btn-danger" onclick="Delele(@item.UserID,'@SN')"> Delete </a>
                             }
+
 
                         </td>
                     </tr>

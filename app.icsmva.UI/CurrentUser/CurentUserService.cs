@@ -7,6 +7,7 @@ using System.Security.Claims;
 using app.icsmva.DAO.dao.users;
 using app.icsmva.Models;
 using app.icsmva.DAO.dao.RolesAndPrivilegeMap;
+using app.icsmva.DAO.dao.userRole;
 
 namespace app.icsmva.UI.CurrentUser
 {
@@ -15,11 +16,13 @@ namespace app.icsmva.UI.CurrentUser
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUsers usersservice;
         private readonly IRolePrivilegemap privilegemapService;
-        public CurentUserService(IHttpContextAccessor _httpContextAccessor, IUsers usersservice, IRolePrivilegemap privilegemapService)
+        private readonly IUsersRoles usersRoles;
+        public CurentUserService(IHttpContextAccessor _httpContextAccessor, IUsers usersservice, IRolePrivilegemap privilegemapService, IUsersRoles usersRoles)
         {
             this._httpContextAccessor = _httpContextAccessor;
             this.usersservice = usersservice;
             this.privilegemapService = privilegemapService;
+            this.usersRoles= usersRoles;
         }
         public CurrentUserInfoVM getcurrentuser()
         {
@@ -33,7 +36,12 @@ namespace app.icsmva.UI.CurrentUser
               vM.RoleId = Convert.ToInt32(Rid);
             if (vM.RoleId != 0)
             {
-                vM.MenuPermition = privilegemapService.UserMenu(vM.RoleId);
+                var res = usersRoles.GetRole(vM.RoleId);
+                if (res.IsDeleted==null)
+                {
+                    vM.MenuPermition = privilegemapService.UserMenu(vM.RoleId);
+                }
+                
             }
             return vM; 
         }

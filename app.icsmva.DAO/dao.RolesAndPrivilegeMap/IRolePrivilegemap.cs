@@ -14,6 +14,7 @@ namespace app.icsmva.DAO.dao.RolesAndPrivilegeMap
         List<UserMenuPermitionVM> UserMenu(int RoleId);
         List<ActionViewModel> Rolepermition();
         RolePrivilegeViewModel Getsingle(int RPMapId);
+        bool Getsingleupdate(int id, int roleId);
         RolePrivilegeViewModel Getparmition(int RoleId,string actinname,string controllrname);
     }
 }

@@ -50,8 +50,39 @@ namespace app.icsmva.UI.Controllers.Admin
             }
 
         }
+
         [HttpPost]
         public IActionResult Role_Add(UserRoleViewModel userRoleViewModel)
+        {
+            var res = usersRoles.GetRolename(userRoleViewModel.RoleName);
+            if (res == null)
+            {
+                int id = usersRoles.Addrole(userRoleViewModel);
+                if (id == 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Entry Faild");
+                    ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.Applicationname, Name = s.Applicationname }), "Id", "Name");
+                    userRoleViewModel.mapprivilege = privilege.GetAllprivilige(0);
+                    return View(userRoleViewModel);
+                }
+                else
+                {
+                    return RedirectToAction("Role_Modify", "UserRoleModify", new { id = id });
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("RoleName", "This Role Name is  Already Exists");
+                ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.Applicationname, Name = s.Applicationname }), "Id", "Name");
+                userRoleViewModel.mapprivilege = privilege.GetAllprivilige(0);
+                return View(userRoleViewModel);
+            }
+
+        }
+
+
+        [HttpPost]
+        public IActionResult Role_Add_copy(UserRoleViewModel userRoleViewModel)
         {
             var res = usersRoles.GetRolename(userRoleViewModel.RoleName);
             if (userRoleViewModel.RoleID > 0)
@@ -106,5 +137,6 @@ namespace app.icsmva.UI.Controllers.Admin
                 }
             }
         }
+       
     }
 }

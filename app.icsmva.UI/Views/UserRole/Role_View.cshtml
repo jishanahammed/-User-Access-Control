@@ -116,7 +116,7 @@
                                                 <a type="submit" class="btn btn-info" href="@Edit.url?id=@item.RoleID"> Edit</a>
                                             } 
                                             @if(delete!=null){
-                                                <a type="submit" class="btn btn-danger" href="@delete.url?id=@item.RoleID"> Delete </a>
+                                                <a type="submit" class="btn btn-danger" onclick="Delele(@item.RoleID,'@SN')"> Delete </a>
                                             }
                                  
                                           
@@ -146,5 +146,24 @@
         $(document).ready(function () {
             $('#UserRole').addClass('active');
         });
+
+        function Delele(id, sl) {
+            var ans = confirm("Are you sure you want to delete this Record?");
+            if (ans) {
+                $.ajax({
+                    url: '/UserRoleDelete/Role_Delete?id=' + id + '',
+                    type: 'GET',
+                    success: function (result) {
+                        if (result) {
+                            $("#" + sl).remove();
+                            $.notify("Delete successfully", "success");
+                        }
+                        else {
+                            $.notify("Sommething went wrong!", "error");
+                        }
+                    }
+                });
+            }
+        }
     </script>
 }

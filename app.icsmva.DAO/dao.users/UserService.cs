@@ -40,7 +40,6 @@ namespace app.icsmva.DAO.dao.users
             user.CreationDate = DateTime.UtcNow;
             user.LastUpdatedDate = DateTime.UtcNow;
             user.CreatedBy = UserId;
-            user.IsDeleted = 1;
             db.USERS.Add(user);
             db.SaveChanges();
             if (user.UserID!=0) {
@@ -53,10 +52,10 @@ namespace app.icsmva.DAO.dao.users
             return model.UserID;    
         }
 
-        public bool Deleteuser(UserViewModel model)
+        public bool Deleteuser(int id)
         {
-            USERS user = db.USERS.FirstOrDefault(f => f.UserID == model.UserID);
-            user.IsDeleted = 0;
+            USERS user = db.USERS.FirstOrDefault(f => f.UserID == id);
+            user.IsDeleted =DateTime.UtcNow;
             db.Entry(user).State = EntityState.Modified;
             var res = db.SaveChanges();
             if (res > 0)
@@ -71,14 +70,14 @@ namespace app.icsmva.DAO.dao.users
 
         public USERS GetUser(string name)
         {
-            USERS uSERS = db.USERS.Where(f => f.IsDeleted == 1 && f.LoginName == name).FirstOrDefault();
+            USERS uSERS = db.USERS.Where(f => f.IsDeleted == null && f.LoginName == name).FirstOrDefault();
             return uSERS;
         }
 
         public UserViewModel GetUserbyid(int userid)
         {
             UserViewModel user = new UserViewModel();
-            USERS model = db.USERS.Where(f => f.IsDeleted == 1 && f.UserID == userid).FirstOrDefault();
+            USERS model = db.USERS.Where(f => f.IsDeleted == null && f.UserID == userid).FirstOrDefault();
             user.LoginName = model.LoginName;
             user.LoginPWD = model.LoginPWD;
             user.FullName = model.FullName;
@@ -95,7 +94,7 @@ namespace app.icsmva.DAO.dao.users
 
         public PagedModel<USERS> GetUserPagedListAsync(int page, int pageSize)
         {
-            IQueryable<USERS> list =  db.USERS.Where(f => f.IsDeleted==1).OrderByDescending(f=>f.UserID).AsQueryable();
+            IQueryable<USERS> list =  db.USERS.Where(f => f.IsDeleted==null).OrderByDescending(f=>f.UserID).AsQueryable();
             int resCount = list.Count();
             var pagers = new PagedList(resCount, page, pageSize);
             int recSkip = (page - 1) * pageSize;
@@ -126,7 +125,6 @@ namespace app.icsmva.DAO.dao.users
             int UserId = Convert.ToInt32(useid);
             user.LastUpdatedDate = DateTime.UtcNow;
             user.LastUpdatedBy = UserId;
-            user.IsDeleted = 1;
             db.Entry(user).State = EntityState.Modified;
             var res=  db.SaveChanges();
             if (res>0)

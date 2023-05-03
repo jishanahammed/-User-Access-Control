@@ -15,6 +15,7 @@ namespace app.icsmva.UI.CurrentUser
         public string RoleName { get; set; }
         public int RoleId { get; set; }
         public int UserId { get; set; }
+        public bool IsRoleActive { get; set; } = true;
         public List<UserMenuPermitionVM>  MenuPermition { get; set; }   
     }
 }

@@ -20,7 +20,7 @@ namespace app.icsmva.DAO.dao.users
         public int CreatedBy { set; get; }
         public DateTime LastUpdatedDate { set; get; }
         public int LastUpdatedBy { set; get; }
-        public short IsDeleted { set; get; }
+        public DateTime IsDeleted { set; get; }
         public string sms { set; get; }
         
     }

@@ -34,7 +34,7 @@ namespace app.icsmva.DAO.dao.Privilege
                 model.ActionPrecedence = item.ActionPrecedence;
                 if (roleId > 0)
                 {
-                    var data = db.ROLESPRIVILEGESMAP.Where(f => f.PrivilegeID == item.PrivilegeID && f.RoleID == roleId).FirstOrDefault();
+                    var data = db.ROLESPRIVILEGESMAP.Where(f => f.PrivilegeID == item.PrivilegeID && f.RoleID == roleId&&f.IsDeleted==1).FirstOrDefault();
                     if (data != null)
                     {
                         model.IsAssign = true;

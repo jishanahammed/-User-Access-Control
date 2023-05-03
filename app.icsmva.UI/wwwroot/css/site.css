@@ -158,3 +158,17 @@ body {
     color: #212529;
     background-color: #e0d2b7;
 }
+.card-footer {
+    padding: 0.10rem 0.5rem;
+    background-color: rgba(0,0,0,.03);
+    border-top: 0 solid rgba(0,0,0,.125);
+}
+.link-primary:hover {
+    border-bottom: 1px solid blue;
+    color: #007bff;
+    font-weight: 600;
+}
+.link-primary{
+    color:black;
+    font-weight:600;
+}

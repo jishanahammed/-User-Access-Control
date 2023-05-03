@@ -81,18 +81,26 @@
                         </p>
                     </a>
                 </li>
-                @foreach (var item in currentuser.MenuPermition)
+                @if(currentuser.MenuPermition==null)
                 {
-                <li class="nav-item" style="font-weight:800">
-
-                    <a asp-controller="@item.ControllerName" asp-action="@item.ActionName" id="@item.UiNmae" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>
-                           @item.UiNmae
-                        </p>
-                    </a>
-                </li>
+                    <p class="text-center"> <b> No Assign Role </b> </p>
                 }
+                else
+                {
+                    @foreach (var item in currentuser.MenuPermition)
+                    {
+                        <li class="nav-item" style="font-weight:800">
+
+                            <a asp-controller="@item.ControllerName" asp-action="@item.ActionName" id="@item.UiNmae" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    @item.UiNmae
+                                </p>
+                            </a>
+                        </li>
+                    }
+                }
+
    @*             <li class="nav-item" style="font-weight:800">
 
                     <a asp-controller="UserRole" asp-action="Role_View" id="UsersRole" class="nav-link">

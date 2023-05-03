@@ -66,5 +66,11 @@ namespace app.icsmva.UI.Controllers.Admin
                 return View(userRoleViewModel);
             }
         }
+        [HttpGet]
+        public IActionResult ActiveInactive(int id, int roleId)
+        {
+            var res = privilegemap.Getsingleupdate(id, roleId);
+            return Json(res);
+        }
     }
 }

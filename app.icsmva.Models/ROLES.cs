@@ -22,7 +22,7 @@ namespace app.icsmva.Models
         public int CreatedBy { set; get; }
         public DateTime LastUpdatedDate { set; get; }
         public int LastUpdatedBy { set; get; }
-        public short IsDeleted { set; get; }
+        public DateTime IsDeleted { set; get; }
         public virtual ICollection<USERS> USERS { get; set; }
     }
 }

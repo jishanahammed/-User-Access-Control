@@ -34,31 +34,8 @@ namespace app.icsmva.DAO.dao.userRole
             role.CreationDate=DateTime.UtcNow; 
             role.LastUpdatedDate=DateTime.UtcNow; 
             role.CreatedBy = UserId;
-            role.IsDeleted = 1;
             db.ROLES.Add(role);
             db.SaveChanges();
-            if (role.RoleID != 0)
-            {
-                var result = model.mapprivilege.Where(f => f.IsAssign == true).ToList();
-                if (result!=null)
-                {
-                    List<ROLESPRIVILEGESMAP> mapdata = new List<ROLESPRIVILEGESMAP>();
-                    foreach (var item in result) {
-                        ROLESPRIVILEGESMAP entty=new ROLESPRIVILEGESMAP();
-                        entty.RoleID = role.RoleID;
-                        entty.PrivilegeID = item.PrivilegeID;
-                        entty.CreationDate = DateTime.UtcNow;
-                        entty.LastUpdatedDate = DateTime.UtcNow;
-                        entty.CreatedBy = UserId;
-                        entty.IsDeleted = 1;
-                        mapdata.Add(entty);
-                    }
-                    db.ROLESPRIVILEGESMAP.AddRange(mapdata);
-                    db.SaveChanges();   
-                }
-                model.RoleID = role.RoleID;
-                return role.RoleID;
-            }
             return role.RoleID;
         }
         public int Updaterole(UserRoleViewModel model)
@@ -75,30 +52,6 @@ namespace app.icsmva.DAO.dao.userRole
             var res = db.SaveChanges();
             if (res>0)
             {
-                List<ROLESPRIVILEGESMAP> deletedata=db.ROLESPRIVILEGESMAP.Where(f=>f.RoleID==role.RoleID).ToList(); 
-                var result = model.mapprivilege.Where(f => f.IsAssign == true).ToList();
-                if (result != null)
-                {
-                    List<ROLESPRIVILEGESMAP> mapdata = new List<ROLESPRIVILEGESMAP>();
-                    foreach (var item in result)
-                    {
-                        ROLESPRIVILEGESMAP entty = new ROLESPRIVILEGESMAP();
-                        entty.RoleID = role.RoleID;
-                        entty.PrivilegeID = item.PrivilegeID;
-                        entty.CreationDate = DateTime.UtcNow;
-                        entty.LastUpdatedDate = DateTime.UtcNow;
-                        entty.CreatedBy = UserId;
-                        entty.IsDeleted = 1;
-                        mapdata.Add(entty);
-                    }
-                    db.ROLESPRIVILEGESMAP.AddRange(mapdata);
-                  var ressave=  db.SaveChanges();
-                    if (ressave>0)
-                    {
-                        db.ROLESPRIVILEGESMAP.RemoveRange(deletedata);
-                        db.SaveChanges();
-                    }
-                }
                 model.RoleID = role.RoleID;
                 return role.RoleID;
             }
@@ -119,13 +72,13 @@ namespace app.icsmva.DAO.dao.userRole
 
         public List<ROLES> GetROLEs()
         {
-            List<ROLES> roleList = db.ROLES.Where(f => f.IsDeleted == 1).ToList();
+            List<ROLES> roleList = db.ROLES.ToList();
             return roleList; 
         }
 
         public PagedModel<ROLES> GetRolesPagedListAsync(int page, int pageSize)
         {
-            IQueryable<ROLES> list = db.ROLES.Where(f => f.IsDeleted == 1).AsQueryable();
+            IQueryable<ROLES> list = db.ROLES.Where(f => f.IsDeleted == null).AsQueryable();
             int resCount = list.Count();
             var pagers = new PagedList(resCount, page, pageSize);
             int recSkip = (page - 1) * pageSize;
@@ -146,6 +99,21 @@ namespace app.icsmva.DAO.dao.userRole
         {
             ROLES rOLES = db.ROLES.FirstOrDefault(f => f.RoleName == model.RoleName && f.RoleID != model.RoleID);
             return rOLES;
+        }
+
+        public int Deleterole(int id)
+        {
+            ROLES role= db.ROLES.FirstOrDefault(d=>d.RoleID == id);
+            role.IsDeleted = DateTime.UtcNow;
+            db.Entry(role).State = EntityState.Modified;
+            var res = db.SaveChanges();
+            if (res>0) {
+                return role.RoleID;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
