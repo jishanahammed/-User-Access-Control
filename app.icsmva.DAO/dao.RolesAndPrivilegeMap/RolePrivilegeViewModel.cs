@@ -10,7 +10,7 @@ namespace app.icsmva.DAO.dao.RolesAndPrivilegeMap
     {
         public int RPMapId { get; set; }
         public int RoleID { set; get; }
-        public int PrivilegeID { set; get; }
+        public string PrivilegeID { set; get; }
         public string RoleName { set; get; }
         public string UIName { set; get; }
         public string ActionName { set; get; }

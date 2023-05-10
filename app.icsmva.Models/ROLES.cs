@@ -12,6 +12,7 @@ namespace app.icsmva.Models
         public ROLES()
         {
             this.USERS = new HashSet<USERS>();
+            this.ROLE_PRIVILEGEs = new HashSet<ROLE_PRIVILEGES>();
         }
         [Key]
         public int RoleID { set; get; }
@@ -22,7 +23,8 @@ namespace app.icsmva.Models
         public int CreatedBy { set; get; }
         public DateTime LastUpdatedDate { set; get; }
         public int LastUpdatedBy { set; get; }
-        public DateTime IsDeleted { set; get; }
+        public DateTime? IsDeleted { set; get; }
         public virtual ICollection<USERS> USERS { get; set; }
+        public virtual ICollection<ROLE_PRIVILEGES> ROLE_PRIVILEGEs { get; set; }
     }
 }

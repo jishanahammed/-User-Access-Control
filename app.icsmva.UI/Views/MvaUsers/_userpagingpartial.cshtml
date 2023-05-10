@@ -8,10 +8,10 @@
         @if (pager.PageIndex > 1)
         {
             <li class="page-item">
-                <a class="page-link" href="#1" onclick="LoadPagination('@Model.StringUrl', 1)"> First </a>
+                <a class="page-link" href="#1" onclick="obLoadPagination('@Model.StringUrl', 1)"> First </a>
             </li>
             <li class="page-item">
-                <a class="page-link" href="#@(pager.PageIndex-1)" onclick="LoadPagination('@Model.StringUrl',@(pager.PageIndex-1))"><i class="fas fa-backward"></i></a>
+                <a class="page-link" href="#@(pager.PageIndex-1)" onclick="obLoadPagination('@Model.StringUrl',@(pager.PageIndex-1))"><i class="fas fa-backward"></i></a>
             </li>
         }
         @for (var pg = pager.PreviousPage; pg <= pager.NextPage; pg++)
@@ -19,23 +19,23 @@
             if (pager.PageIndex == pg)
             {
                 <li class="page-item active">
-                    <a class="page-link" href="#@pg" onclick="LoadPagination('@Model.StringUrl',@pg)"> @pg</a>
+                    <a class="page-link" href="#@pg" onclick="obLoadPagination('@Model.StringUrl',@pg)"> @pg</a>
                 </li>
             }
             else
             {
                 <li class="page-item">
-                    <a class="page-link" href="#@pg" onclick="LoadPagination('@Model.StringUrl',@pg)"> @pg</a>
+                    <a class="page-link" href="#@pg" onclick="obLoadPagination('@Model.StringUrl',@pg)"> @pg</a>
                 </li>
             }
         }
         @if (pager.PageIndex < pager.TotalPages)
         {
             <li class="page-item">
-                <a class="page-link" href="#@(pager.PageIndex+1)" onclick="LoadPagination('@Model.StringUrl',@(pager.PageIndex+1))"><i class="fas fa-forward"></i></a>
+                <a class="page-link" href="#@(pager.PageIndex+1)" onclick="obLoadPagination('@Model.StringUrl',@(pager.PageIndex+1))"><i class="fas fa-forward"></i></a>
             </li>
             <li class="page-item">
-                <a class="page-link" href="#@pager.TotalPages" onclick="LoadPagination('@Model.StringUrl',@pager.TotalPages)"> Last </a>
+                <a class="page-link" href="#@pager.TotalPages" onclick="obLoadPagination('@Model.StringUrl',@pager.TotalPages)"> Last </a>
             </li>
         }
     </ul>

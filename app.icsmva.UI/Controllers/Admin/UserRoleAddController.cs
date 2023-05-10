@@ -39,12 +39,12 @@ namespace app.icsmva.UI.Controllers.Admin
                 userRoleViewModel.LastUpdatedDate = role.LastUpdatedDate;
                 userRoleViewModel.Remarks=role.Remarks;
                 userRoleViewModel.mapprivilege = privilege.GetAllprivilige(id);
-                ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.Applicationname, Name = s.Applicationname }), "Id", "Name");
+                ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationID, Name = s.ApplicationName }), "Id", "Name");
                 return View(userRoleViewModel);
             }
             else
             {
-                ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.Applicationname, Name = s.Applicationname }), "Id", "Name");
+                ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationID, Name = s.ApplicationName }), "Id", "Name");
                 userRoleViewModel.mapprivilege = privilege.GetAllprivilige(0);
                 return View(userRoleViewModel);
             }
@@ -61,7 +61,7 @@ namespace app.icsmva.UI.Controllers.Admin
                 if (id == 0)
                 {
                     ModelState.AddModelError(string.Empty, "Entry Faild");
-                    ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.Applicationname, Name = s.Applicationname }), "Id", "Name");
+                    ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
                     userRoleViewModel.mapprivilege = privilege.GetAllprivilige(0);
                     return View(userRoleViewModel);
                 }
@@ -73,7 +73,7 @@ namespace app.icsmva.UI.Controllers.Admin
             else
             {
                 ModelState.AddModelError("RoleName", "This Role Name is  Already Exists");
-                ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.Applicationname, Name = s.Applicationname }), "Id", "Name");
+                ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
                 userRoleViewModel.mapprivilege = privilege.GetAllprivilige(0);
                 return View(userRoleViewModel);
             }
@@ -94,7 +94,7 @@ namespace app.icsmva.UI.Controllers.Admin
                     if (result1==0)
                     {
                         ModelState.AddModelError(string.Empty, "Entry Faild");
-                        ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.Applicationname, Name = s.Applicationname }), "Id", "Name");
+                        ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationID, Name = s.ApplicationName }), "Id", "Name");
                         userRoleViewModel.mapprivilege = privilege.GetAllprivilige(0);
                         return View(userRoleViewModel);
                     }
@@ -106,7 +106,7 @@ namespace app.icsmva.UI.Controllers.Admin
                 else
                 {
                     ModelState.AddModelError("RoleName", "This Role Name is  Already Exists");
-                    ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.Applicationname, Name = s.Applicationname }), "Id", "Name");
+                    ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
                     userRoleViewModel.mapprivilege = privilege.GetAllprivilige(0);
                     return View(userRoleViewModel);
                 }
@@ -119,7 +119,7 @@ namespace app.icsmva.UI.Controllers.Admin
                     if (id == 0)
                     {
                         ModelState.AddModelError(string.Empty, "Entry Faild");
-                        ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.Applicationname, Name = s.Applicationname }), "Id", "Name");
+                        ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
                         userRoleViewModel.mapprivilege = privilege.GetAllprivilige(0);
                         return View(userRoleViewModel);
                     }
@@ -131,7 +131,7 @@ namespace app.icsmva.UI.Controllers.Admin
                 else
                 {
                     ModelState.AddModelError("RoleName", "This Role Name is  Already Exists");
-                    ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.Applicationname, Name = s.Applicationname }), "Id", "Name");
+                    ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
                     userRoleViewModel.mapprivilege = privilege.GetAllprivilige(0);
                     return View(userRoleViewModel);
                 }

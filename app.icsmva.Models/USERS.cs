@@ -12,19 +12,19 @@ namespace app.icsmva.Models
         [Key]
         public int UserID { set; get; }
         public string LoginName { set; get; }
-        public string LoginPWD { set; get; }
+        public string? LoginPWD { set; get; }
         public int EmployeeNo { set; get; }
         public string FullName { set; get; }
         public string Remarks { set; get; }
         public string ApplicationName { set; get; }
         public int RoleID { set; get; }
-        public int AccessLevel { set; get; }
+        public int? AccessLevel { set; get; }
         public short IsDomainUser { set; get; }
         public DateTime CreationDate { set; get; }
         public int CreatedBy { set; get; }
         public DateTime LastUpdatedDate { set; get; }
         public int LastUpdatedBy { set; get; }
-        public DateTime IsDeleted { set; get; }
+        public DateTime? IsDeleted { set; get; }
         public virtual ROLES Role { get; set; }
     }
 }

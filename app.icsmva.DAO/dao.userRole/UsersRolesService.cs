@@ -78,7 +78,7 @@ namespace app.icsmva.DAO.dao.userRole
 
         public PagedModel<ROLES> GetRolesPagedListAsync(int page, int pageSize)
         {
-            IQueryable<ROLES> list = db.ROLES.Where(f => f.IsDeleted == null).AsQueryable();
+            IQueryable<ROLES> list = db.ROLES.Where(f => (DateTime)f.IsDeleted == null).AsQueryable();
             int resCount = list.Count();
             var pagers = new PagedList(resCount, page, pageSize);
             int recSkip = (page - 1) * pageSize;

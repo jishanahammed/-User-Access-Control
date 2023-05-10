@@ -1,3 +1,4 @@
+using app.icsmva.DAO.dao.app.user;
 using app.icsmva.DAO.dao.Application;
 using app.icsmva.DAO.dao.Privilege;
 using app.icsmva.DAO.dao.RolesAndPrivilegeMap;
@@ -9,8 +10,24 @@ using app.icsmva.UI.CurrentUser;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+     .WriteTo.Logger(lc => lc
+        .Filter.ByIncludingOnly(evt => evt.Level == LogEventLevel.Error)
+   .WriteTo.File("C:\\logsFile\\" + DateTime.Now.Year.ToString() + "\\" + DateTime.UtcNow.ToString("MM-yyyy") + "\\" + DateTime.UtcNow.ToString("dd-MM-yyyy") + "\\error.txt",
+            rollingInterval: RollingInterval.Minute))
+    .WriteTo.Logger(lc => lc
+        .Filter.ByIncludingOnly(evt => evt.Level == LogEventLevel.Warning)
+   .WriteTo.File("C:\\logsFile\\" + DateTime.Now.Year.ToString() + "\\" + DateTime.UtcNow.ToString("MM-yyyy") + "\\" + DateTime.UtcNow.ToString("dd-MM-yyyy") + "\\warning.txt",
+            rollingInterval: RollingInterval.Day))
+    .WriteTo.Logger(lc => lc
+        .Filter.ByIncludingOnly(evt => evt.Level == LogEventLevel.Information)
+        .WriteTo.File("C:\\logsFile\\" + DateTime.Now.Year.ToString() + "\\" + DateTime.UtcNow.ToString("MM-yyyy") + "\\" + DateTime.UtcNow.ToString("dd-MM-yyyy") + "\\info.txt",
+            rollingInterval: RollingInterval.Day))
+    .CreateLogger();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -25,11 +42,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
 builder.Services.AddMemoryCache();
-
 builder.Services.AddTransient<IPrivilege, PrivilegeService>();
 builder.Services.AddTransient<IApplicationName, ApplicationService>();
 builder.Services.AddTransient<IUsersRoles, UsersRolesService>();
 builder.Services.AddTransient<IUsers, UserService>();
+builder.Services.AddSingleton<Iappusers, appuserService>();
 builder.Services.AddTransient<IRolePrivilegemap, RolePrivilegemapService>();
 builder.Services.AddTransient<ICurentUserGet, CurentUserService>();
 builder.Services.AddScoped<IAuthorizationHandler, PermissionHandler>();

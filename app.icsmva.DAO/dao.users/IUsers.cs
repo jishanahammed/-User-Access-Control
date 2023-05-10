@@ -10,13 +10,13 @@ namespace app.icsmva.DAO.dao.users
 {
     public interface IUsers
     {
-        PagedModel<USERS> GetUserPagedListAsync(int page, int pageSize);
+        PagedModel<USERS> GetUserPagedListAsync(int page, int pageSize, string ApplicationName, int RoleID, string stringsearch);
         USERS GetUser(string name);
         UserViewModel GetUserbyid(int userid);
         int  Adduser(UserViewModel model);
         bool  Updateuser(UserViewModel model);
         bool  Deleteuser(int id);
-
+        List<USERS> userlist();
 
     }
 }

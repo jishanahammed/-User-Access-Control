@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 
 namespace app.icsmva.Models
 {
-    public class ROLESPRIVILEGESMAP
+    public class ROLE_PRIVILEGES
     {
         [Key]
-        public int RPMapId { get; set; }
+        public long RolePrivilegeID { get; set; }
         public int RoleID { set; get; }
-        public int PrivilegeID { set; get; }
+        public string PrivilegeID { set; get; }
         public DateTime CreationDate { set; get; }
         public int CreatedBy { set; get; }
         public DateTime LastUpdatedDate { set; get; }
         public int LastUpdatedBy { set; get; }
-        public short IsDeleted { set; get; }
+        public DateTime? IsDeleted { set; get; }
+        public virtual ROLES Role { get; set; }
     }
 }

@@ -9,6 +9,6 @@ namespace app.icsmva.DAO.dao.Application
 {
     public interface IApplicationName
     {
-        List<APPLICATIONNAME> Getlist();
+        List<NA_APPLICATIONS> Getlist();
     }
 }

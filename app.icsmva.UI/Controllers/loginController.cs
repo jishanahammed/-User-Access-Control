@@ -5,6 +5,7 @@ using app.icsmva.UI.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System.Security.Claims;
 
 namespace app.icsmva.UI.Controllers
@@ -25,18 +26,19 @@ namespace app.icsmva.UI.Controllers
         {
             return View();
         }
-        [HttpPost]
-         public async Task<IActionResult> Index(LoginViewModel model)
-        {
-            var user=usersservice.GetUser(model.UserName);
-            if (user==null)
-            {
-                ModelState.AddModelError(string.Empty, "User not found");
 
+        [HttpPost]
+        public async Task<IActionResult> Index(LoginViewModel model)
+        {
+            var user = usersservice.GetUser(model.UserName);
+            if (user == null)
+            {
+                Log.Error("\r\nLog Type: ERROR\r\nExecution Time:" + DateTime.UtcNow + "\r\nSource:login/Index \r\nMessages:user not found \r\nUsername:" + model.UserName + " password:" + model.Password + "");
+                ModelState.AddModelError(string.Empty, "User not found");
                 return View(model);
             }
 
-            if (user.LoginPWD==model.Password)
+            if (user.LoginPWD == model.Password)
             {
                 var role = usersRoles.GetRole(user.RoleID);
                 var claims = new List<Claim> {
@@ -44,22 +46,23 @@ namespace app.icsmva.UI.Controllers
                 new Claim("FullName" ,user.FullName),
                 new Claim("Role" ,role.RoleName),
                 new Claim("RoleId" ,role.RoleID.ToString()),
-                new Claim("UserId" ,user.UserID.ToString()),               
+                new Claim("UserId" ,user.UserID.ToString()),
                 };
                 var identity = new ClaimsIdentity(
-                   claims,CookieAuthenticationDefaults.AuthenticationScheme);
-                var principal=new ClaimsPrincipal(identity);
+                   claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
                 var prop = new AuthenticationProperties();
-                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, prop).Wait();
-
+                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, prop).Wait();
+                Log.Information("\r\nLog Type: Information\r\nExecution Time:" + DateTime.UtcNow + "\r\nSource:login/Index\r\nMessages:login success\r\nUsername:" + model.UserName + " password:" + model.Password + "");
                 return Redirect("/Admin/Index");
             }
             else
             {
+                Log.Error("\r\nLog Type: ERROR\r\nExecution Time:" + DateTime.UtcNow + "\r\nSource:login/Index \r\nMessages: User not verified\r\nUsername:" + model.UserName + " password:" + model.Password + "");
                 ModelState.AddModelError(string.Empty, "User is not verified");
                 return View(model);
             }
-           
+
         }
         public IActionResult AccessDenied()
         {

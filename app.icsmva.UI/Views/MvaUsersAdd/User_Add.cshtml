@@ -34,6 +34,12 @@
                 <form asp-action="User_Add">
                     <input type="hidden" asp-for="UserID" />
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @if (ViewBag.message != null)
+                    {
+                    <h4 class="text-success">
+                            @ViewBag.message
+                    </h4>
+                    }
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -48,7 +54,7 @@
                                 <input asp-for="FullName" class="form-control" required />
                                 <span asp-validation-for="FullName" class="text-danger"></span>
                             </div>
-                        </div>   
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label asp-for="LoginPWD" class="control-label">Login Password</label>
@@ -64,7 +70,7 @@
                                 </select>
                                 <span asp-validation-for="RoleID" class="text-danger"></span>
                             </div>
-                        </div>  
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label asp-for="ApplicationName" class="control-label"> Application Name </label>
@@ -80,7 +86,7 @@
                                 <input asp-for="Remarks" class="form-control" required />
                                 <span asp-validation-for="Remarks" class="text-danger"></span>
                             </div>
-                        </div>      
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label asp-for="EmployeeNo" class="control-label"> Employee No</label>

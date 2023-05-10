@@ -7,15 +7,16 @@ using System.Threading.Tasks;
 
 namespace app.icsmva.Models
 {
-    public class APPLICATIONNAME
+    public class NA_APPLICATIONS
     {
         [Key]
-        public int ApplicationId { get; set; }    
-        public string Applicationname{ get; set; }    
+        public int ApplicationID { get; set; }    
+        public string ApplicationName { get; set; }    
+        public string ApplicationFullName { get; set; }    
         public DateTime CreationDate { set; get; }
         public int CreatedBy { set; get; }
         public DateTime LastUpdatedDate { set; get; }
         public int LastUpdatedBy { set; get; }
-        public short IsDeleted { set; get; }
+        public DateTime? IsDeleted { set; get; }
     }
 }

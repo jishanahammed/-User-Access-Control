@@ -22,19 +22,19 @@ namespace app.icsmva.DAO.dao.Privilege
         public List<RolePrivilegeViewModel> GetAllprivilige(int roleId)
         {
             List<RolePrivilegeViewModel> models = new List<RolePrivilegeViewModel>();   
-           var res = db.PRIVILEGES.Where(f => f.IsDeleted == 1).OrderBy(f=>f.Precedence).ToList();   
+           var res = db.PRIVILEGES.Where(f => (DateTime)f.IsDeleted == null).OrderBy(f=>f.Precedence).ToList();   
             foreach (var item in res)
             {
               
                 RolePrivilegeViewModel model= new RolePrivilegeViewModel(); 
                 model.PrivilegeID = item.PrivilegeID;
                 model.PrivilegeName = item.PrivilegeName;   
-                model.UIName = item.UIName; 
+                model.UIName = item.UserInterfaceName; 
                 model.ActionName = item.ActionName; 
                 model.ActionPrecedence = item.ActionPrecedence;
                 if (roleId > 0)
                 {
-                    var data = db.ROLESPRIVILEGESMAP.Where(f => f.PrivilegeID == item.PrivilegeID && f.RoleID == roleId&&f.IsDeleted==1).FirstOrDefault();
+                    var data = db.ROLE_PRIVILEGES.Where(f => f.PrivilegeID == item.PrivilegeID && f.RoleID == roleId&& (DateTime)f.IsDeleted==null).FirstOrDefault();
                     if (data != null)
                     {
                         model.IsAssign = true;
@@ -51,7 +51,7 @@ namespace app.icsmva.DAO.dao.Privilege
 
         public PagedModel<PRIVILEGES> GetpriviligePagedListAsync(int page, int pageSize)
         {
-            IQueryable<PRIVILEGES> list = db.PRIVILEGES.Where(f => f.IsDeleted == 1).AsQueryable();
+            IQueryable<PRIVILEGES> list = db.PRIVILEGES.Where(f => (DateTime)f.IsDeleted ==null).AsQueryable();
             int resCount = list.Count();
             var pagers = new PagedList(resCount, page, pageSize);
             int recSkip = (page - 1) * pageSize;

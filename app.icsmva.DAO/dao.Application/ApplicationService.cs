@@ -14,9 +14,9 @@ namespace app.icsmva.DAO.dao.Application
         {
             this.db = db;
         }
-        public List<APPLICATIONNAME> Getlist()
+        public List<NA_APPLICATIONS> Getlist()
         {
-            List <APPLICATIONNAME> list = db.APPLICATIONNAME.Where(f=>f.IsDeleted==1).ToList(); 
+            List <NA_APPLICATIONS> list = db.NA_APPLICATIONS.Where(f=> (DateTime)f.IsDeleted==null).ToList(); 
           return list;
         }
     }

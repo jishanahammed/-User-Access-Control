@@ -70,14 +70,14 @@ namespace app.icsmva.DAO.dao.users
 
         public USERS GetUser(string name)
         {
-            USERS uSERS = db.USERS.Where(f => f.IsDeleted == null && f.LoginName == name).FirstOrDefault();
+            USERS uSERS = db.USERS.Where(f => (DateTime)f.IsDeleted == null && f.LoginName == name).FirstOrDefault();
             return uSERS;
         }
 
         public UserViewModel GetUserbyid(int userid)
         {
             UserViewModel user = new UserViewModel();
-            USERS model = db.USERS.Where(f => f.IsDeleted == null && f.UserID == userid).FirstOrDefault();
+            USERS model = db.USERS.Where(f => (DateTime)f.IsDeleted == null && f.UserID == userid).FirstOrDefault();
             user.LoginName = model.LoginName;
             user.LoginPWD = model.LoginPWD;
             user.FullName = model.FullName;
@@ -92,9 +92,21 @@ namespace app.icsmva.DAO.dao.users
             return user;
         }
 
-        public PagedModel<USERS> GetUserPagedListAsync(int page, int pageSize)
+        public PagedModel<USERS> GetUserPagedListAsync(int page, int pageSize, string ApplicationName, int RoleID, string stringsearch)
         {
-            IQueryable<USERS> list =  db.USERS.Where(f => f.IsDeleted==null).OrderByDescending(f=>f.UserID).AsQueryable();
+            IQueryable<USERS> list =  db.USERS.Where(f => (DateTime)f.IsDeleted==null).OrderByDescending(f=>f.UserID);
+            if (!string.IsNullOrEmpty(stringsearch))
+            {
+                list = list.Where(s => s.LoginName.Contains(stringsearch) || s.ApplicationName.Contains(stringsearch) || s.FullName.Contains(stringsearch) || s.Remarks.Contains(stringsearch)).AsQueryable();
+            }
+            if (!string.IsNullOrEmpty(ApplicationName))
+            {
+                list = list.Where(s => s.ApplicationName.Contains(ApplicationName)).AsQueryable();
+            }
+            if (RoleID != 0)
+            {
+                list = list.Where(s => s.RoleID == RoleID).AsQueryable();
+            }
             int resCount = list.Count();
             var pagers = new PagedList(resCount, page, pageSize);
             int recSkip = (page - 1) * pageSize;
@@ -136,6 +148,12 @@ namespace app.icsmva.DAO.dao.users
                 return false;
             }
            
+        }
+
+        public List<USERS> userlist()
+        {
+           List<USERS> users = db.USERS.ToList();
+            return users;   
         }
     }
 }
