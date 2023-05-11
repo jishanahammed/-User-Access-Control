@@ -31,7 +31,7 @@ namespace app.icsmva.UI.Controllers.Admin
             UserViewModel user = new UserViewModel();
 
             ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
-            ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
+            ViewBag.rolelist = usersRoles.GetROLEs().Select(s => new { Id = s.RoleID, Name = s.RoleName, ApplicationName = s.ApplicationName });
             return View(user);
         }
         [HttpPost]
@@ -43,7 +43,7 @@ namespace app.icsmva.UI.Controllers.Admin
             {
                 ModelState.Clear();
                 ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
-                ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
+                ViewBag.rolelist = usersRoles.GetROLEs().Select(s => new { Id = s.RoleID, Name = s.RoleName, ApplicationName = s.ApplicationName });
                 ViewBag.message = "successfully".ToString();
 
                 var resd = ("Information, Execution Time:" + DateTime.UtcNow + ", Source: MvaUserModify/User_Modify, Messages:Information Added Successfully, "+ pram + "").ToString();
@@ -54,7 +54,7 @@ namespace app.icsmva.UI.Controllers.Admin
             {
                 ModelState.AddModelError(string.Empty, res3.ToString());
                 ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
-                ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
+                ViewBag.rolelist = usersRoles.GetROLEs().Select(s => new { Id = s.RoleID, Name = s.RoleName, ApplicationName = s.ApplicationName });
                 var resd=("Error, Execution Time:" + DateTime.UtcNow + ", Source: MvaUsersAdd/User_Add, Messages:" + res3.ToString() + ","+ pram + "").ToString();
                 Log.Error(resd);
                 return View(model);

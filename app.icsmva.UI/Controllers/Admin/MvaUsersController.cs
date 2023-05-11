@@ -28,25 +28,25 @@ namespace app.icsmva.UI.Controllers.Admin
             this.application = application;
         }
         [Authorize("Authorization")]
-        public IActionResult User_View(int page = 1, int pagesize = 10, string ApplicationName=null, int RoleID=0, string stringsearch=null)
+        public IActionResult User_View(int page = 1, int pagesize = 10, string ApplicationName=null, int RoleID=0, string fullName = null, int employeeNo = 0)
         {
             if (page < 1)
                 page = 1;
-            var result = usersservice.GetUserPagedListAsync(page, pagesize, ApplicationName,RoleID,stringsearch);
+            var result = usersservice.GetUserPagedListAsync(page, pagesize, ApplicationName,RoleID, fullName, employeeNo);
             ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
-            ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
+            ViewBag.rolelist = usersRoles.GetROLEs().Select(s => new { Id = s.RoleID, Name = s.RoleName, ApplicationName = s.ApplicationName });
             return View(result);
         }
         [HttpGet]
-        public IActionResult Getpage(int page = 1, int pagesize = 10, string ApplicationName = null, int RoleID = 0, string stringsearch = null)
+        public IActionResult Getpage(int page = 1, int pagesize = 10, string ApplicationName = null, int RoleID = 0, string fullName = null, int employeeNo = 0)
         {
             if (page < 1)
                 page = 1;
-            var result = usersservice.GetUserPagedListAsync(page, pagesize, ApplicationName, RoleID, stringsearch);
+            var result = usersservice.GetUserPagedListAsync(page, pagesize, ApplicationName, RoleID, fullName, employeeNo);
             return PartialView("_userpaginatedpartial", result);
         }
 
-        public IActionResult Excel()
+        public IActionResult Excel(string ApplicationName = null, int RoleID = 0, string fullName = null, int employeeNo = 0)
         {
             var data = usersservice.userlist();
 
@@ -87,7 +87,7 @@ namespace app.icsmva.UI.Controllers.Admin
                     worksheet.Cell(currentRow, 9).FormulaA1 = ($"=G{currentRow}+H{currentRow}"); 
 
 
-                    worksheet.Cell(currentRow, 6).Style.DateFormat.SetFormat("dd-MM-yyyy");
+                    worksheet.Cell(currentRow, 6).Style.DateFormat.SetFormat("dd-MMM-yyyy");
                     worksheet.Cells($"A{currentRow}:I{currentRow}").Style.Fill.SetBackgroundColor(XLColor.FromColor(color2));
                     worksheet.Cells($"A{currentRow}:I{currentRow}").Style.Border.OutsideBorder = (XLBorderStyleValues)ExcelBorderStyle.Dashed;
                     worksheet.Cells($"A{currentRow}:I{currentRow}").Style.Border.OutsideBorderColor = (XLColor.FromColor(Color.Gray));

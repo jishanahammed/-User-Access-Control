@@ -7,7 +7,20 @@ html {
     font-size: 16px;
   }
 }
+@media (min-width: 768px) {
+    .mt {
+        margin-top:29px;
+    } 
+    .mt2 {
+        margin-top:12px;
+    }
+}
 
+@media (max-width: 768px) {
+    .mt {
+        margin-top:12px;
+    }
+}
 html {
   position: relative;
   min-height: 100%;
@@ -17,7 +30,12 @@ body {
   margin-bottom: 60px;
 }
 
-
+.btn-icvm {
+    color: #fff;
+    background-color: #947b5b !important;
+    border-color: #947b5b;
+    box-shadow: none;
+}
 
 @media (max-width:768px) {
     .d-ui-card {

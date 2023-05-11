@@ -92,12 +92,16 @@ namespace app.icsmva.DAO.dao.users
             return user;
         }
 
-        public PagedModel<USERS> GetUserPagedListAsync(int page, int pageSize, string ApplicationName, int RoleID, string stringsearch)
+        public PagedModel<USERS> GetUserPagedListAsync(int page, int pageSize, string ApplicationName, int RoleID, string fullName, int employeeNo)
         {
             IQueryable<USERS> list =  db.USERS.Where(f => (DateTime)f.IsDeleted==null).OrderByDescending(f=>f.UserID);
-            if (!string.IsNullOrEmpty(stringsearch))
+            if (!string.IsNullOrEmpty(fullName))
             {
-                list = list.Where(s => s.LoginName.Contains(stringsearch) || s.ApplicationName.Contains(stringsearch) || s.FullName.Contains(stringsearch) || s.Remarks.Contains(stringsearch)).AsQueryable();
+                list = list.Where(s => s.FullName.Contains(fullName)).AsQueryable();
+            }
+            if (employeeNo != 0)
+            {
+                list = list.Where(s => s.EmployeeNo == employeeNo).AsQueryable();
             }
             if (!string.IsNullOrEmpty(ApplicationName))
             {
