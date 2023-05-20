@@ -74,7 +74,7 @@ namespace app.icsmva.UI.Controllers.Admin
                 ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
                 ViewBag.message = "successfully updated".ToString();
                
-                var resd = ("Information, Execution Time:" + DateTime.UtcNow + ", Source: MvaUserModify/User_Modify, Messages:Information Updated Successfully, " + pram + "").ToString();
+                var resd = ("Log Type:Information\r\nSource: MvaUserModify/User_Modify\r\nSQL Query:USERS_Update/r/nMessages:Information Updated Successfully/r/n" + pram + "").ToString();
                 Log.Information(resd);
                 return View(model);
             }
@@ -83,7 +83,7 @@ namespace app.icsmva.UI.Controllers.Admin
                 ModelState.AddModelError(string.Empty, res3.ToString());
                 ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
                 ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
-                var resd = ("Warning, Execution Time:" + DateTime.UtcNow + ", Source:  MvaUserModify/User_Modify, Messages:" + res3.ToString() + "," + pram + "").ToString();
+                var resd = ("Log Type:Warning/r/nSource:MvaUserModify/User_Modify/r/nSQL Query:USERS_Update/r/nMessages:" + res3.ToString() + "/r/n" + pram + "").ToString();
                 Log.Warning(resd);
                 return View(model);
             }

@@ -100,7 +100,15 @@
                                             @SN
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.RoleName)
+                                            @if (Edit != null)
+                                            {
+                                                <a type="submit" class="link-primary" href="@Edit.url?id=@item.RoleID"> @item.RoleName</a>
+                                            }
+                                            else
+                                            {
+                                                @Html.DisplayFor(modelItem => item.RoleName)
+                                            }
+                               
                                         </td>   
                                         <td>
                                             @Html.DisplayFor(modelItem => item.ApplicationName)
@@ -112,11 +120,11 @@
                                             @item.CreationDate.ToLongDateString()
                                         </td>
                                         <td class="text-center">
-                                            @if(Edit!=null){
+                                         @*   @if(Edit!=null){
                                                 <a type="submit" class="btn btn-info" href="@Edit.url?id=@item.RoleID"> Edit</a>
-                                            } 
+                                            }*@ 
                                             @if(delete!=null){
-                                                <a type="submit" class="btn btn-danger" onclick="Delele(@item.RoleID,'@SN')"> Delete </a>
+                                                <a type="submit" class="btn btn-danger" onclick="Delele(@item.RoleID,'@SN')"> <i class="fa fa-trash"></i> </a>
                                             }
                                  
                                           

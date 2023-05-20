@@ -154,11 +154,28 @@ namespace app.icsmva.DAO.dao.users
            
         }
 
-        public List<USERS> userlist()
+        public List<USERS> userlist(string ApplicationName, int RoleID, string fullName, int employeeNo)
         {
-           List<USERS> users = db.USERS.ToList();
-            return users;   
-        }
+            
+                IQueryable<USERS> list = db.USERS.Where(f => (DateTime)f.IsDeleted == null).OrderByDescending(f => f.UserID);
+                if (!string.IsNullOrEmpty(fullName))
+                {
+                    list = list.Where(s => s.FullName.Contains(fullName)).AsQueryable();
+                }
+                if (employeeNo != 0)
+                {
+                    list = list.Where(s => s.EmployeeNo == employeeNo).AsQueryable();
+                }
+                if (!string.IsNullOrEmpty(ApplicationName))
+                {
+                    list = list.Where(s => s.ApplicationName.Contains(ApplicationName)).AsQueryable();
+                }
+                if (RoleID != 0)
+                {
+                    list = list.Where(s => s.RoleID == RoleID).AsQueryable();
+                }
+                return list.ToList();
+         }
     }
 }
 

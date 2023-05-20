@@ -103,7 +103,7 @@
                         <button type="button" class="btn btn-icvm w-100 d-block" onclick="obLoadPagination('@pagemodel.StringUrl', 1)"> <i class="fas fa-search mr-2"></i> Search</button>
                     </div>
                     <div class="col-lg-2 col-md-4 col-sm-12 mt2">
-                        <a class=" btn btn-secondary w-100 d-block" tabindex="0" target="_blank" type="button" href="/MvaUsers/Excel"><span> <i class="fa fa-file-excel"></i>   Export Excel</span></a>
+                        <a class=" btn btn-secondary w-100 d-block" tabindex="0" target="_blank" type="button" onclick="exprote()"><span> <i class="fa fa-file-excel"></i>   Export Excel</span></a>
                     </div>
                     <div class="col-lg-2 col-md-4 col-sm-12 mt2">
                         <button type="button" class="btn btn-outline-danger w-100 d-block" onclick="ObjectionLoadRefresh('@pagemodel.StringUrl', 1)"> <i class="fas fa-sync-alt mr-2"></i> Refresh</button>
@@ -258,7 +258,12 @@
         }
 
         function exprote() {
-            location.reload();
+            var fullName = $("#object_Search").val();
+            var employeeNo = $("#object_Search1").val();
+            var ApplicationName = $("#ApplicationName option:selected").val();
+            var RoleID = $("#RoleID option:selected").val();
+            var url = "MvaUsers/Excel";
+            window.location.href = "/" + url + "?ApplicationName=" + ApplicationName + "&&RoleID=" + RoleID + "&&fullName=" + fullName + " &&employeeNo=" + parseInt(employeeNo) + "";
         }
         $("#ApplicationName").change(function () {
             var ApplicationName = $("#ApplicationName option:selected").val();

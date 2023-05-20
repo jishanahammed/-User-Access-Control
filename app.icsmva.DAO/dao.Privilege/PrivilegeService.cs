@@ -24,8 +24,7 @@ namespace app.icsmva.DAO.dao.Privilege
             List<RolePrivilegeViewModel> models = new List<RolePrivilegeViewModel>();   
            var res = db.PRIVILEGES.Where(f => (DateTime)f.IsDeleted == null).OrderBy(f=>f.Precedence).ToList();   
             foreach (var item in res)
-            {
-              
+            {              
                 RolePrivilegeViewModel model= new RolePrivilegeViewModel(); 
                 model.PrivilegeID = item.PrivilegeID;
                 model.PrivilegeName = item.PrivilegeName;   

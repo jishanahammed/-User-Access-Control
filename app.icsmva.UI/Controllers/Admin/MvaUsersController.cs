@@ -2,13 +2,12 @@
 using app.icsmva.DAO.dao.userRole;
 using app.icsmva.DAO.dao.users;
 using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Math;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OfficeOpenXml.Style;
-using System.Diagnostics;
 using System.Drawing;
+
 
 namespace app.icsmva.UI.Controllers.Admin
 {
@@ -48,8 +47,7 @@ namespace app.icsmva.UI.Controllers.Admin
 
         public IActionResult Excel(string ApplicationName = null, int RoleID = 0, string fullName = null, int employeeNo = 0)
         {
-            var data = usersservice.userlist();
-
+            var data = usersservice.userlist(ApplicationName, RoleID, fullName, employeeNo);
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("data");
@@ -59,7 +57,6 @@ namespace app.icsmva.UI.Controllers.Admin
                 Color color3 = Color.Black; 
                 XLColor xlColor = XLColor.FromColor(color);
                 XLColor xlColor3 = XLColor.FromColor(color3);
-
                 worksheet.Cell(currentRow, 1).Value = "Login Name";
                 worksheet.Cell(currentRow, 2).Value = "Full Name";
                 worksheet.Cell(currentRow, 3).Value = "Application Name";
@@ -73,6 +70,11 @@ namespace app.icsmva.UI.Controllers.Admin
                 worksheet.Cells("A1:I1").Style.Font.FontColor = XLColor.FromColor(Color.White);
                 worksheet.Cells("A1:I1").Style.Font.FontSize = 12;
                 worksheet.Cells("A1:I1").Style.Font.Bold = true;
+                var dd = worksheet.Cells("A1:I1");
+                dd.Style.Border.OutsideBorder = (XLBorderStyleValues)ExcelBorderStyle.Dashed;
+                dd.Style.Border.OutsideBorderColor = (XLColor.FromColor(Color.Gray));
+                worksheet.ColumnWidth =25;    
+              dd.Style.Alignment.Horizontal = (XLAlignmentHorizontalValues)ExcelHorizontalAlignment.General;
                 foreach (var item in data)
                 {
                     currentRow++;
@@ -85,12 +87,12 @@ namespace app.icsmva.UI.Controllers.Admin
                     worksheet.Cell(currentRow, 7).Value = currentRow;
                     worksheet.Cell(currentRow, 8).Value = currentRow+2;
                     worksheet.Cell(currentRow, 9).FormulaA1 = ($"=G{currentRow}+H{currentRow}"); 
-
-
                     worksheet.Cell(currentRow, 6).Style.DateFormat.SetFormat("dd-MMM-yyyy");
+                   var row= worksheet.Cells($"A{currentRow}:I{currentRow}");
                     worksheet.Cells($"A{currentRow}:I{currentRow}").Style.Fill.SetBackgroundColor(XLColor.FromColor(color2));
                     worksheet.Cells($"A{currentRow}:I{currentRow}").Style.Border.OutsideBorder = (XLBorderStyleValues)ExcelBorderStyle.Dashed;
                     worksheet.Cells($"A{currentRow}:I{currentRow}").Style.Border.OutsideBorderColor = (XLColor.FromColor(Color.Gray));
+                    row.Style.Alignment.Horizontal = (XLAlignmentHorizontalValues)ExcelHorizontalAlignment.General;
                 }
                 using (var strem = new MemoryStream())
                 {

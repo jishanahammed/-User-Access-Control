@@ -142,11 +142,11 @@
                                     <td class="text-center">
                                         @if (item.IsAssign == true)
                                         {
-                                            <a id="cust+@item.PrivilegeID" href="#"> <span onclick="actives(@item.PrivilegeID,'@Model.RoleID')" class="btn-success padding"> <i class="fa fa-check"></i> </span> </a>
+                                            <a id="cust+@item.PrivilegeID" style="cursor:pointer"> <span onclick="actives('@item.PrivilegeID','@Model.RoleID')" class="btn-success padding"> <i class="fa fa-check"></i> </span> </a>
                                         }
                                         else
                                         {
-                                            <a id="cust+@item.PrivilegeID" href="#"> <span onclick="inactives(@item.PrivilegeID,'@Model.RoleID')" class="btn-danger padding2"> <i class="fa fa-times"></i> </span> </a>
+                                            <a id="cust+@item.PrivilegeID" style="cursor:pointer"> <span onclick="inactives('@item.PrivilegeID','@Model.RoleID')" class="btn-danger padding2"> <i class="fa fa-times"></i> </span> </a>
                                         }
                                         @*<div class="form-check">
                                             <input type="checkbox" id="@item.PrivilegeID" asp-for="@item.IsAssign" />
