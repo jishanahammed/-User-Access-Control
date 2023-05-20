@@ -15,7 +15,7 @@ namespace app.icsmva.DAO.dao.users
         UserViewModel GetUserbyid(int userid);
         int  Adduser(UserViewModel model);
         bool  Updateuser(UserViewModel model);
-        bool  Deleteuser(int id);
+        USERS Deleteuser(int id);
         List<USERS> userlist(string ApplicationName, int RoleID, string fullName, int employeeNo);
     }
 }

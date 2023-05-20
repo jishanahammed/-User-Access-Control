@@ -52,19 +52,20 @@ namespace app.icsmva.DAO.dao.users
             return model.UserID;    
         }
 
-        public bool Deleteuser(int id)
+        public USERS Deleteuser(int id)
         {
-            USERS user = db.USERS.FirstOrDefault(f => f.UserID == id);
+            USERS user = new USERS();    
+            user = db.USERS.FirstOrDefault(f => f.UserID == id);
             user.IsDeleted =DateTime.UtcNow;
             db.Entry(user).State = EntityState.Modified;
             var res = db.SaveChanges();
             if (res > 0)
             {
-                return true;
+                return user;
             }
             else
             {
-                return false;
+                return user;
             }
         }
 

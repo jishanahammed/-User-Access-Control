@@ -5,6 +5,7 @@ using app.icsmva.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Serilog;
 
 namespace app.icsmva.UI.Controllers.Admin
 {
@@ -20,36 +21,22 @@ namespace app.icsmva.UI.Controllers.Admin
             this.usersRoles = usersRoles;
             this.application = application;
         }
-        [Authorize("Authorization")]
-        //public IActionResult User_Delete(int userId)
-        //{
-        //    UserViewModel user = users.GetUserbyid(userId);
-        //    ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.Applicationname, Name = s.Applicationname }), "Id", "Name");
-        //    ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
-
-        //    return View(user);
-        //}
-        //[HttpPost]
-        //public IActionResult User_Delete(UserViewModel model)
-        //{
-        //    bool res=users.Deleteuser(model);
-        //    if (res)
-        //    {
-        //        return RedirectToAction("User_View", "MvaUsers");
-        //    }
-        //    else
-        //    {
-        //        ModelState.AddModelError(string.Empty, "Entry Faild");
-        //        return View(model);
-        //    }
-
-        //}
+        
         [Authorize("Authorization")]
         [HttpGet]
         public IActionResult User_Delete(int id)
         {
-            bool res = users.Deleteuser(id);
-            return Json(res);
+            var res = users.Deleteuser(id);
+            var pram = ("ApplicationName:" + res.ApplicationName + ",RoleID:" + res.RoleID + ",Remarks:" + res.Remarks + "").ToString();
+            if (res==null)
+            {
+                return Json(false);
+                var resd2 = ("Log Type:Error/r/nSource: MvaUserDelete/User_Delete/r/nSQL Query:USERS_Update/r/nMessages:Delete Not Successfully/r/n" + pram + "").ToString();
+                Log.Information(resd2);
+            }
+            var resd = ("Log Type:Information/r/nSource: MvaUserDelete/User_Delete/r/nSQL Query:USERS_Update/r/nMessages:Delete Successfully/r/n" + pram + "").ToString();
+            Log.Information(resd);
+            return Json(true);
         }
     }
 }
