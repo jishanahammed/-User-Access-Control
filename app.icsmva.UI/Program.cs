@@ -1,3 +1,4 @@
+using app.icsmva.DAO.dao.app.Role;
 using app.icsmva.DAO.dao.app.user;
 using app.icsmva.DAO.dao.Application;
 using app.icsmva.DAO.dao.Privilege;
@@ -47,6 +48,7 @@ builder.Services.AddTransient<IApplicationName, ApplicationService>();
 builder.Services.AddTransient<IUsersRoles, UsersRolesService>();
 builder.Services.AddTransient<IUsers, UserService>();
 builder.Services.AddSingleton<Iappusers, appuserService>();
+builder.Services.AddSingleton<IAppRole, appRoleService>();
 builder.Services.AddTransient<IRolePrivilegemap, RolePrivilegemapService>();
 builder.Services.AddTransient<ICurentUserGet, CurentUserService>();
 builder.Services.AddScoped<IAuthorizationHandler, PermissionHandler>();

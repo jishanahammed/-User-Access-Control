@@ -1,11 +1,13 @@
 ﻿using app.icsmva.DAO.dao.Application;
 using app.icsmva.DAO.dao.userRole;
 using app.icsmva.DAO.dao.users;
+using app.icsmva.UI.CurrentUser;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OfficeOpenXml.Style;
+using Serilog;
 using System.Drawing;
 
 
@@ -18,22 +20,29 @@ namespace app.icsmva.UI.Controllers.Admin
         private readonly IUsers usersservice;
         private readonly IUsersRoles usersRoles;
         private readonly IApplicationName application;
-        public MvaUsersController(ILogger<MvaUsersController> logger, IUsers usersservice,IUsersRoles usersRoles, IApplicationName application)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public MvaUsersController(ILogger<MvaUsersController> logger, IUsers usersservice,IUsersRoles usersRoles, IApplicationName application, IHttpContextAccessor _httpContextAccessor)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.usersservice = usersservice;
             _logger = logger;
             this.usersRoles = usersRoles;
             this.application = application;
+            this._httpContextAccessor = _httpContextAccessor;
         }
         [Authorize("Authorization")]
         public IActionResult User_View(int page = 1, int pagesize = 10, string ApplicationName=null, int RoleID=0, string fullName = null, int employeeNo = 0)
         {
             if (page < 1)
                 page = 1;
+            var LoginName = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "LoginName").Value;
+            var FullName = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "FullName").Value;
+            var pram = ("page:" + page + ",pagesize:" + pagesize + ",ApplicationName:" + ApplicationName + ",RoleID:" + RoleID + ",fullName:" + fullName + ",employeeNo:" + employeeNo + ",Curent_User:"+ LoginName + ","+ FullName + "").ToString();
             var result = usersservice.GetUserPagedListAsync(page, pagesize, ApplicationName,RoleID, fullName, employeeNo);
             ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
             ViewBag.rolelist = usersRoles.GetROLEs().Select(s => new { Id = s.RoleID, Name = s.RoleName, ApplicationName = s.ApplicationName });
+            var resd = ("Log Type:Information,Source: MvaUserModify/User_View,Messages:Information Get Successfully," + pram + "").ToString();
+            Log.Information("\r\n" + resd + "\r\n");
             return View(result);
         }
         [HttpGet]
@@ -41,7 +50,12 @@ namespace app.icsmva.UI.Controllers.Admin
         {
             if (page < 1)
                 page = 1;
+            var LoginName = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "LoginName").Value;
+            var FullName = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "FullName").Value;
+            var pram = ("page:" + page + ",pagesize:" + pagesize + ",ApplicationName:" + ApplicationName + ",RoleID:" + RoleID + ",fullName:" + fullName + ",employeeNo:" + employeeNo + ",Curent_User:" + LoginName + "," + FullName + "").ToString();
             var result = usersservice.GetUserPagedListAsync(page, pagesize, ApplicationName, RoleID, fullName, employeeNo);
+            var resd = ("Log Type:Information,Source: MvaUserModify/User_View,Messages:Information Get Successfully," + pram + "").ToString();
+            Log.Information("\r\n" + resd + "\r\n");
             return PartialView("_userpaginatedpartial", result);
         }
 
@@ -98,6 +112,10 @@ namespace app.icsmva.UI.Controllers.Admin
                 {
                     workbook.SaveAs(strem);
                     var conten = strem.ToArray();
+                    var LoginName = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "LoginName").Value;
+                    var FullName = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "FullName").Value;
+                    var resd = ("Log Type:Information,Source:MvaUsers/Excel,Messages:userList.xlsx generated successfully,Curent_User:"+ LoginName +","+ FullName +"").ToString();
+                    Log.Information("\r\n" + resd + "\r\n");
                     return File(conten, GetMimeType(".xlsx"), "userList.xlsx");
                 }
             }

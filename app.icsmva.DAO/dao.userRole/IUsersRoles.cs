@@ -17,7 +17,7 @@ namespace app.icsmva.DAO.dao.userRole
         ROLES GetRolenameexit(UserRoleViewModel model);
         int Addrole(UserRoleViewModel model);
         int Updaterole(UserRoleViewModel model);
-        int Deleterole(int id);
+        ROLES Deleterole(int id);
         List<ROLES> GetROLEs();
       
     }

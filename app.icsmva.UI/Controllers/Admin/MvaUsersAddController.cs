@@ -18,12 +18,14 @@ namespace app.icsmva.UI.Controllers.Admin
         private readonly IUsersRoles usersRoles;
         private readonly IApplicationName application;
         private readonly Iappusers iappusers;
-        public MvaUsersAddController(IUsers users, IUsersRoles usersRoles, IApplicationName application, Iappusers iappusers)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public MvaUsersAddController(IUsers users, IUsersRoles usersRoles, IApplicationName application, Iappusers iappusers, IHttpContextAccessor httpContextAccessor)
         {
             this.users = users;
             this.usersRoles = usersRoles;
             this.application = application;
             this.iappusers = iappusers;
+            _httpContextAccessor = httpContextAccessor;
         }
         [Authorize("Authorization")]
         public IActionResult User_Add()
@@ -38,7 +40,9 @@ namespace app.icsmva.UI.Controllers.Admin
         public IActionResult User_Add(UserViewModel model)
         {
             var res3 = iappusers.AddRecode(model);
-            var pram = ("LoginName:" + model.LoginName + ",FullName:" + model.FullName + ",ApplicationName:" + model.ApplicationName + ",LoginPWD:" + model.LoginPWD + ",RoleID:" + model.RoleID + ",Remarks:" + model.Remarks + "").ToString();
+            var LoginName = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "LoginName").Value;
+            var FullName = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "FullName").Value;
+            var pram = ("LoginName:" + model.LoginName + ",FullName:" + model.FullName + ",ApplicationName:" + model.ApplicationName + ",LoginPWD:" + model.LoginPWD + ",RoleID:" + model.RoleID + ",Remarks:" + model.Remarks + ",Curent_User:"+ LoginName +","+ FullName +"").ToString();
             if (res3=="successfilly")
             {
                 ModelState.Clear();
@@ -46,8 +50,8 @@ namespace app.icsmva.UI.Controllers.Admin
                 ViewBag.rolelist = usersRoles.GetROLEs().Select(s => new { Id = s.RoleID, Name = s.RoleName, ApplicationName = s.ApplicationName });
                 ViewBag.message = "successfully".ToString();
 
-                var resd = ("Log Type:Information/r/nSource: MvaUserModify/User_Modify/r/nSQL Query:USERS_Create/r/nMessages:Information Added Successfully/r/n" + pram + "").ToString();
-                Log.Information(resd);
+                var resd = ("Log Type:Information,Source: MvaUserModify/User_Modify,SQL Query:USERS_Create,Messages:Information Added Successfully," + pram + "").ToString();
+                Log.Information("\r\n" + resd + "\r\n");
                 return View(model);
             }
             else 
@@ -55,35 +59,12 @@ namespace app.icsmva.UI.Controllers.Admin
                 ModelState.AddModelError(string.Empty, res3.ToString());
                 ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
                 ViewBag.rolelist = usersRoles.GetROLEs().Select(s => new { Id = s.RoleID, Name = s.RoleName, ApplicationName = s.ApplicationName });
-                var resd=("Log Type:Error/r/n/Source: MvaUsersAdd/User_Add/r/nSQL Query:USERS_Create/r/nMessages:" + res3.ToString() + "/r/n"+ pram + "").ToString();
-                Log.Information(resd);
+                var resd=("Log Type:Error,Source: MvaUsersAdd/User_Add,SQL Query:USERS_Create,Messages:" + res3.ToString() + ","+ pram + "").ToString();
+                Log.Information("\r\n" + resd + "\r\n");
                 return View(model);
             }
   
-            //var res = users.GetUser(model.LoginName);
-            //if (res == null)
-            //{
-            //    int result = users.Adduser(model);
-
-            //    if (result == 0)
-            //    {
-            //        ModelState.AddModelError(string.Empty, "Entry Faild");
-            //        ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
-            //        ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
-            //        return View(model);
-            //    }
-            //    else
-            //    {
-            //        return RedirectToAction("User_View", "MvaUsers");
-            //    }  
-            //}
-            //else
-            //{
-            //    ModelState.AddModelError("LoginName", "This Login Name is  Already Exists");
-            //    ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
-            //    ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
-            //    return View(model);
-            //}
+           
         }
     }
 }

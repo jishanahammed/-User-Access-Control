@@ -101,18 +101,19 @@ namespace app.icsmva.DAO.dao.userRole
             return rOLES;
         }
 
-        public int Deleterole(int id)
+        public ROLES Deleterole(int id)
         {
             ROLES role= db.ROLES.FirstOrDefault(d=>d.RoleID == id);
             role.IsDeleted = DateTime.UtcNow;
             db.Entry(role).State = EntityState.Modified;
             var res = db.SaveChanges();
             if (res>0) {
-                return role.RoleID;
+                return role;
             }
             else
             {
-                return 0;
+                role.RoleID = 0;
+                return role;
             }
         }
     }

@@ -33,7 +33,7 @@ namespace app.icsmva.UI.Controllers
             var user = usersservice.GetUser(model.UserName);
             if (user == null)
             {
-                Log.Error("\r\nLog Type: ERROR\r\nExecution Time:" + DateTime.UtcNow + "\r\nSource:login/Index \r\nMessages:user not found \r\nUsername:" + model.UserName + " password:" + model.Password + "");
+                Log.Error("\r\nLog Type: ERROR,Execution Time:" + DateTime.UtcNow + "Source:login/Index ,Messages:user not found ,Username:" + model.UserName + " password:" + model.Password + "");
                 ModelState.AddModelError(string.Empty, "User not found");
                 return View(model);
             }
@@ -53,12 +53,12 @@ namespace app.icsmva.UI.Controllers
                 var principal = new ClaimsPrincipal(identity);
                 var prop = new AuthenticationProperties();
                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, prop).Wait();
-                Log.Information("\r\nLog Type: Information\r\nExecution Time:" + DateTime.UtcNow + "\r\nSource:login/Index\r\nMessages:login success\r\nUsername:" + model.UserName + " password:" + model.Password + "");
+                Log.Information("\r\nLog Type: Information,Source:login/Index,Messages:login success,Username:" + model.UserName + " password:" + model.Password + "\r\n");
                 return Redirect("/Admin/Index");
             }
             else
             {
-                Log.Error("\r\nLog Type: ERROR\r\nExecution Time:" + DateTime.UtcNow + "\r\nSource:login/Index \r\nMessages: User not verified\r\nUsername:" + model.UserName + " password:" + model.Password + "");
+                Log.Error("\r\nLog Type: ERROR,Source:login/Index ,Messages: User not verified,Username:" + model.UserName + " password:" + model.Password + "\r\n");
                 ModelState.AddModelError(string.Empty, "User is not verified");
                 return View(model);
             }

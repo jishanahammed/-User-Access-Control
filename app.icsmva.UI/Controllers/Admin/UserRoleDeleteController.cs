@@ -6,6 +6,7 @@ using app.icsmva.DAO.dao.userRole;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Serilog;
 
 namespace app.icsmva.UI.Controllers.Admin
 {
@@ -15,49 +16,35 @@ namespace app.icsmva.UI.Controllers.Admin
         private readonly IApplicationName application;
         private readonly IRolePrivilegemap privilegemap;
         private readonly IPrivilege privilege;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserRoleDeleteController(IUsersRoles usersRoles, IApplicationName application, IRolePrivilegemap privilegemap, IPrivilege privilege)
+        public UserRoleDeleteController(IUsersRoles usersRoles, IApplicationName application, IRolePrivilegemap privilegemap, IPrivilege privilege, IHttpContextAccessor httpContextAccessor)
         {
             this.usersRoles = usersRoles;
             this.application = application;
             this.privilegemap = privilegemap;
             this.privilege = privilege;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [Authorize("Authorization")]
         public IActionResult Role_Delete(int id)
         {
             var res = usersRoles.Deleterole(id);
-            return Json(res);
+            var LoginName = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "LoginName").Value;
+            var FullName = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "FullName").Value;
+            var pram = ("RoleName:" + res.RoleName + ",ApplicationName:" + res.ApplicationName + ",Remarks:" + res.Remarks + ",Curent_User:" + LoginName + "," + FullName + "").ToString();
+            if (res.RoleID>0)
+            {
+                var resd = ("Log Type:Information,Source: UserRoleDelete/Role_Delete,Messages:Role Deleted Successfully," + pram + "").ToString();
+                Log.Information("\r\n" + resd + "\r\n");
+                return Json(res.RoleID);
+            }
+            var resd2 = ("Log Type:Information,Source: UserRoleDelete/Role_Delete,Messages:Role Delete Not Successfully," + pram + "").ToString();
+            Log.Information("\r\n" + resd2 + "\r\n");
+            return Json(0);
         }
 
-        //public IActionResult Role_Delete(int id)
-        //{
-        //       UserRoleViewModel userRoleViewModel = new UserRoleViewModel();
-        //        var role = usersRoles.GetRole(id);
-        //        userRoleViewModel.RoleName = role.RoleName;
-        //        userRoleViewModel.RoleID = role.RoleID;
-        //        userRoleViewModel.ApplicationName = role.ApplicationName;
-        //        userRoleViewModel.CreationDate = role.CreationDate;
-        //        userRoleViewModel.LastUpdatedDate = role.LastUpdatedDate;
-        //        userRoleViewModel.Remarks = role.Remarks;
-        //        userRoleViewModel.mapprivilege = privilege.GetAllprivilige(id).Where(f=>f.IsAssign==true).ToList();
-        //        ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.Applicationname, Name = s.Applicationname }), "Id", "Name");
-        //        return View(userRoleViewModel);
-        //    }
-        //[HttpPost]
-        //public IActionResult Role_Delete(UserRoleViewModel model)
-        //{
-        //    var res=usersRoles.Deleterole(model);
-        //    if (res>0)
-        //    {
-        //        return RedirectToAction("Role_View", "UserRole");
-        //    }
-        //    else
-        //    {
-        //        ModelState.AddModelError(string.Empty, "Entry Faild");
-        //        return View(model);
-        //    }
-        //}
+       
     }
 }

@@ -16,13 +16,15 @@ namespace app.icsmva.UI.Controllers.Admin
         private readonly IUsersRoles usersRoles;
         private readonly IApplicationName application;
         private readonly Iappusers iappusers;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MvaUserModifyController(IUsers users, IUsersRoles usersRoles, IApplicationName application, Iappusers iappusers)
+        public MvaUserModifyController(IUsers users, IUsersRoles usersRoles, IApplicationName application, Iappusers iappusers, IHttpContextAccessor _httpContextAccessor)
         {
             this.users = users;
             this.usersRoles = usersRoles;
             this.application = application;
             this.iappusers = iappusers;
+            this._httpContextAccessor = _httpContextAccessor;
         }
         [Authorize("Authorization")]
         public IActionResult User_Modify(int userId)
@@ -32,41 +34,15 @@ namespace app.icsmva.UI.Controllers.Admin
             ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
             return View(user);
         }
-        [HttpPost]
-        public IActionResult User_Modify_copy(UserViewModel model)
-        {
-            var res = users.GetUser(model.LoginName);
-            if (res==null||res.UserID==model.UserID)
-            {
-                bool result = users.Updateuser(model);
-                if (result ==false)
-                {
-                    ModelState.AddModelError(string.Empty, "Entry Faild");
-                    ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
-                    ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
-                    return View(model);
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Update Successfully");
-                    ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
-                    ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
-                    return View(model);
-                }
-            }
-            else
-            {
-                ModelState.AddModelError("LoginName", "This Login Name is  Already Exists");
-                ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
-                ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
-                return View(model);
-            }
-        }
+
         [HttpPost]
         public IActionResult User_Modify(UserViewModel model)
         {
             var res3 = iappusers.UpdateRecode(model);
-            var pram = ("ApplicationName:" + model.ApplicationName + ",RoleID:" + model.RoleID + ",Remarks:" + model.Remarks + "").ToString();
+            var LoginName = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "LoginName").Value;
+            var FullName = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "FullName").Value;
+  
+            var pram = ("ApplicationName:" + model.ApplicationName + ",RoleID:" + model.RoleID + ",Remarks:" + model.Remarks + ",Curent_User:"+ LoginName + ","+FullName+"").ToString();
             if (res3 == "successfilly")
             {
                 ModelState.Clear();
@@ -74,8 +50,8 @@ namespace app.icsmva.UI.Controllers.Admin
                 ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
                 ViewBag.message = "successfully updated".ToString();
                
-                var resd = ("Log Type:Information\r\nSource: MvaUserModify/User_Modify\r\nSQL Query:USERS_Update/r/nMessages:Information Updated Successfully/r/n" + pram + "").ToString();
-                Log.Information(resd);
+                var resd = ("Log Type:Information,Source: MvaUserModify/User_Modify,SQL Query:USERS_Update,Messages:Information Updated Successfully," + pram + "").ToString();
+                Log.Information("\r\n" + resd + "\r\n");
                 return View(model);
             }
             else
@@ -83,8 +59,8 @@ namespace app.icsmva.UI.Controllers.Admin
                 ModelState.AddModelError(string.Empty, res3.ToString());
                 ViewBag.applicationlist = new SelectList((application.Getlist()).Select(s => new { Id = s.ApplicationName, Name = s.ApplicationName }), "Id", "Name");
                 ViewBag.rolelist = new SelectList((usersRoles.GetROLEs()).Select(s => new { Id = s.RoleID, Name = s.RoleName }), "Id", "Name");
-                var resd = ("Log Type:Warning/r/nSource:MvaUserModify/User_Modify/r/nSQL Query:USERS_Update/r/nMessages:" + res3.ToString() + "/r/n" + pram + "").ToString();
-                Log.Warning(resd);
+                var resd = ("Log Type:Warning,Source:MvaUserModify/User_Modify,SQL Query:USERS_Update,Messages:" + res3.ToString() + "," + pram + "").ToString();
+                Log.Warning("\r\n" + resd + "\r\n");
                 return View(model);
             }
         }
