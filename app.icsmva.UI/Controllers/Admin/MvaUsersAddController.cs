@@ -50,7 +50,7 @@ namespace app.icsmva.UI.Controllers.Admin
                 ViewBag.rolelist = usersRoles.GetROLEs().Select(s => new { Id = s.RoleID, Name = s.RoleName, ApplicationName = s.ApplicationName });
                 ViewBag.message = "successfully".ToString();
 
-                var resd = ("Log Type:Information,Source: MvaUserModify/User_Modify,SQL Query:USERS_Create,Messages:Information Added Successfully," + pram + "").ToString();
+                var resd = ("Log Type:Information,Source: MvaUserModify/User_Add,SQL Query:USERS_Create,Messages:Information Added Successfully," + pram + "").ToString();
                 Log.Information("\r\n" + resd + "\r\n");
                 return View(model);
             }

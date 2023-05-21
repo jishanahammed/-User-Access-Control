@@ -83,12 +83,12 @@ namespace app.icsmva.UI.Controllers.Admin
             var res = privilegemap.Getsingleupdate(id, roleId);
             if (res)
             {
-                var resd = ("Log Type:Information,Source: UserRoleModify/ActiveInactive,Messages:Privilege Active Successfully," + pram + "").ToString();
+                var resd = ("Log Type:Information,Source: UserRoleModify/ActiveInactive,Messages:Privilege Assign Successfully," + pram + "").ToString();
                 Log.Information("\r\n" + resd + "\r\n");
             }
             else
             {
-                var resd = ("Log Type:Information,Source: UserRoleModify/ActiveInactive,Messages:Privilege InActive Successfully," + pram + "").ToString();
+                var resd = ("Log Type:Warning,Source: UserRoleModify/ActiveInactive,Messages:Privilege Assign not Successfully," + pram + "").ToString();
                 Log.Information("\r\n" + resd + "\r\n");
             }
             return Json(res);
